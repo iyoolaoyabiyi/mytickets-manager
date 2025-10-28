@@ -8,7 +8,7 @@
       <article
         v-for="stat in stats"
         :key="stat.key"
-        class="c-stat-card"
+        class="c-stat-card animate-fade-up"
       >
         <div>
           <span class="c-stat-card__label">{{ stat.label }}</span>
@@ -21,7 +21,7 @@
         {{ copy.actions.toTickets }}
       </RouterLink>
     </div>
-    <section v-if="!loading && !hasTickets" class="c-empty">
+    <section v-if="!loading && !hasTickets" class="c-empty animate-fade-up">
       <img class="c-empty__illustration" :src="barChart" alt="" />
       <p class="c-empty__title">{{ ticketsCopy.empty.primary.title }}</p>
       <RouterLink class="c-button c-button--primary" to="/tickets">
@@ -37,6 +37,7 @@ import copy from '../../../packages/assets/copy/dashboard.json'
 import ticketsCopy from '../../../packages/assets/copy/tickets.json'
 import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
 import { getTicketStats, TICKETS_CHANGED_EVENT } from '../../../packages/utils/tickets'
+import { usePageMeta } from '../composables/usePageMeta'
 
 type StatKey = 'total' | 'open' | 'inProgress' | 'closed'
 
@@ -48,6 +49,11 @@ const totals = reactive<Record<StatKey, number>>({
 })
 
 const loading = ref(true)
+
+usePageMeta({
+  title: copy.title,
+  description: copy.subtitle
+})
 
 const stats = computed(() => ([
   { key: 'total', label: copy.stats.total, value: totals.total },

@@ -4,10 +4,14 @@ import copy from '../../../packages/assets/copy/dashboard.json'
 import ticketsCopy from '../../../packages/assets/copy/tickets.json'
 import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
 import { getTicketStats, TICKETS_CHANGED_EVENT } from '../../../packages/utils/tickets'
+import { useAuthGuard } from '../hooks/useAuthGuard'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 type StatKey = 'total' | 'open' | 'inProgress' | 'closed'
 
 export default function Dashboard() {
+  useAuthGuard()
+  usePageMeta({ title: copy.title, description: copy.subtitle })
   const [stats, setStats] = useState<Record<StatKey, number>>({
     total: 0,
     open: 0,
@@ -52,7 +56,7 @@ export default function Dashboard() {
       </header>
       <div className="grid gap-lg md:grid-cols-4" aria-busy={loading}>
         {statEntries.map((stat) => (
-          <article className="c-stat-card" key={stat.key}>
+          <article className="c-stat-card animate-fade-up" key={stat.key}>
             <div>
               <span className="c-stat-card__label">{stat.label}</span>
               <div className="c-stat-card__value">{stat.value}</div>
@@ -64,7 +68,7 @@ export default function Dashboard() {
         <Link className="c-button c-button--primary" to="/tickets">{copy.actions.toTickets}</Link>
       </div>
       {!loading && !hasTickets && (
-        <section className="c-empty">
+        <section className="c-empty animate-fade-up">
           <img className="c-empty__illustration" src={barChart} alt="" />
           <p className="c-empty__title">{ticketsCopy.empty.primary.title}</p>
           <Link className="c-button c-button--primary" to="/tickets">

@@ -1,10 +1,13 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import globalCopy from '../../../packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
+import { logout } from '../../../packages/utils/auth'
+import { pushToast } from '../../../packages/utils/toast'
 
 export default function Header() {
   const location = useLocation()
+  const navigate = useNavigate()
   const isAuthRoute = location.pathname.startsWith('/auth')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [theme, setTheme] = useState<Theme>(getStoredTheme())
@@ -23,7 +26,7 @@ export default function Header() {
     return [
       { to: '/dashboard', label: globalCopy.nav.dashboard },
       { to: '/tickets', label: globalCopy.nav.tickets },
-      { to: '/auth/login', label: globalCopy.nav.logout }
+      { to: '/auth/login', label: globalCopy.nav.logout, action: 'logout' as const }
     ]
   }, [isAuthRoute])
 
@@ -33,6 +36,17 @@ export default function Header() {
 
   const handleThemeToggle = () => {
     setTheme((current) => toggleTheme(current))
+  }
+
+  const handleNavigate = () => {
+    setIsMenuOpen(false)
+  }
+
+  const handleLogout = () => {
+    logout()
+    setIsMenuOpen(false)
+    pushToast(globalCopy.toasts.authEnd, 'info')
+    navigate('/auth/login', { replace: true })
   }
 
   return (
@@ -65,7 +79,13 @@ export default function Header() {
           data-state={isMenuOpen ? 'open' : 'closed'}
         >
           {links.map((link) => (
-            <Link key={link.to} to={link.to} className="c-header__link">{link.label}</Link>
+            link.action === 'logout' ? (
+              <button key={link.label} className="c-header__link" type="button" onClick={handleLogout}>
+                {link.label}
+              </button>
+            ) : (
+              <Link key={link.to} to={link.to} className="c-header__link" onClick={handleNavigate}>{link.label}</Link>
+            )
           ))}
           <button
             className="c-button c-button--secondary md:hidden"

@@ -15,24 +15,28 @@ import {
   type TicketFilters
 } from '../../../packages/utils/tickets'
 import { formatRelativeTime } from '../../../packages/utils/time'
+import { pushToast } from '../../../packages/utils/toast'
+import { useAuthGuard } from '../hooks/useAuthGuard'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const statusClass = (status: string) => (status === 'in_progress' ? 'c-tag--in-progress' : `c-tag--${status}`)
 
 export default function Tickets() {
+  useAuthGuard()
+  usePageMeta({ title: copy.title, description: 'Manage, search, and update your myTickets queue.' })
+
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [feedback, setFeedback] = useState<{ message: string; kind: 'success' | 'error' }>({
-    message: '',
-    kind: 'success'
-  })
+  const [alertMessage, setAlertMessage] = useState('')
   const [filters, setFilters] = useState<TicketFilters>(() => defaultFilters())
-  const filtersRef = useRef<TicketFilters>(filters)
+  const filtersRef = useRef(filters)
+  const searchTimer = useRef<number>()
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [modal, setModal] = useState<{ open: boolean; mode: 'create' | 'edit'; ticket: Ticket | null }>(
     { open: false, mode: 'create', ticket: null }
   )
-  const feedbackTimer = useRef<number | null>(null)
+  const didMount = useRef(false)
 
   const statusOptions = useMemo(
     () =>
@@ -61,82 +65,85 @@ export default function Tickets() {
   const emptyTitle = isFiltered ? copy.empty.filtered.title : copy.empty.primary.title
   const emptyAction = isFiltered ? copy.empty.filtered.action : copy.empty.primary.action
 
-  const showFeedback = useCallback((message: string, kind: 'success' | 'error' = 'success') => {
-    if (feedbackTimer.current) {
-      window.clearTimeout(feedbackTimer.current)
-    }
-    setFeedback({ message, kind })
-    feedbackTimer.current = window.setTimeout(() => {
-      setFeedback((current) => (current.message === message ? { ...current, message: '' } : current))
-    }, 3200)
-  }, [])
+  const clearAlert = () => setAlertMessage('')
 
-  const fetchTickets = useCallback(async (nextFilters?: TicketFilters) => {
-    const criteria = nextFilters ?? filtersRef.current
-    filtersRef.current = criteria
+  const loadTickets = useCallback(async (criteria?: TicketFilters) => {
+    const nextFilters = criteria ?? filtersRef.current
+    filtersRef.current = nextFilters
     setStatus('loading')
     try {
-      const data = await listTickets({ ...criteria })
+      const data = await listTickets({ ...nextFilters })
       setTickets(data)
       setStatus('ready')
       setErrorMessage('')
+      clearAlert()
     } catch {
       setStatus('error')
       setErrorMessage(globalCopy.toasts.loadError)
+      setAlertMessage(globalCopy.toasts.loadError)
+      pushToast(globalCopy.toasts.loadError, 'error')
     }
   }, [])
 
   useEffect(() => {
-    fetchTickets()
-    const handler = () => fetchTickets()
+    let active = true
+    ;(async () => {
+      await loadTickets()
+      if (active) {
+        didMount.current = true
+      }
+    })()
+    const handler = () => loadTickets(filtersRef.current)
     window.addEventListener(TICKETS_CHANGED_EVENT, handler)
     return () => {
       window.removeEventListener(TICKETS_CHANGED_EVENT, handler)
-      if (feedbackTimer.current) {
-        window.clearTimeout(feedbackTimer.current)
-      }
+      window.clearTimeout(searchTimer.current)
+      active = false
     }
-  }, [fetchTickets])
+  }, [loadTickets])
+
+  useEffect(() => {
+    if (!didMount.current) return
+    window.clearTimeout(searchTimer.current)
+    searchTimer.current = window.setTimeout(() => {
+      void loadTickets(filters)
+    }, 240)
+    return () => {
+      window.clearTimeout(searchTimer.current)
+    }
+  }, [filters.q, loadTickets])
+
+  useEffect(() => {
+    if (!didMount.current) return
+    void loadTickets(filters)
+  }, [filters.status, filters.priority, loadTickets])
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
-    setFilters((prev) => {
-      const next = { ...prev, q: value }
-      filtersRef.current = next
-      return next
-    })
+    setFilters((prev) => ({ ...prev, q: value }))
   }
 
   const handleStatusChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as TicketFilters['status']
-    setFilters((prev) => {
-      const next = { ...prev, status: value }
-      filtersRef.current = next
-      void fetchTickets(next)
-      return next
-    })
+    setFilters((prev) => ({ ...prev, status: value }))
   }
 
   const handlePriorityChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as TicketFilters['priority']
-    setFilters((prev) => {
-      const next = { ...prev, priority: value }
-      filtersRef.current = next
-      void fetchTickets(next)
-      return next
-    })
+    setFilters((prev) => ({ ...prev, priority: value }))
   }
 
-  const handleFiltersSubmit = (event: FormEvent) => {
+  const handleFiltersSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    void fetchTickets()
+    window.clearTimeout(searchTimer.current)
+    void loadTickets(filters)
   }
 
   const resetFilters = () => {
-    const next = defaultFilters()
-    setFilters(next)
-    filtersRef.current = next
-    void fetchTickets(next)
+    const defaults = defaultFilters()
+    setFilters(defaults)
+    filtersRef.current = defaults
+    setAlertMessage('')
   }
 
   const openCreateModal = () => {
@@ -155,15 +162,16 @@ export default function Tickets() {
     try {
       if (modal.mode === 'edit' && modal.ticket) {
         await updateTicket(modal.ticket.id, draft)
-        showFeedback(globalCopy.toasts.updateSuccess)
+        pushToast(globalCopy.toasts.updateSuccess, 'success')
       } else {
         await createTicket(draft)
-        showFeedback(globalCopy.toasts.createSuccess)
+        pushToast(globalCopy.toasts.createSuccess, 'success')
       }
       closeModal()
-      await fetchTickets()
+      await loadTickets()
     } catch {
-      showFeedback(globalCopy.toasts.validation, 'error')
+      setAlertMessage(globalCopy.toasts.validation)
+      pushToast(globalCopy.toasts.validation, 'error')
     }
   }
 
@@ -173,10 +181,11 @@ export default function Tickets() {
     setDeletingId(id)
     try {
       await deleteTicket(id)
-      showFeedback(globalCopy.toasts.deleteSuccess)
-      await fetchTickets()
+      pushToast(globalCopy.toasts.deleteSuccess, 'success')
+      await loadTickets()
     } catch {
-      showFeedback(globalCopy.toasts.loadError, 'error')
+      setAlertMessage(globalCopy.toasts.loadError)
+      pushToast(globalCopy.toasts.loadError, 'error')
     } finally {
       setDeletingId(null)
     }
@@ -193,7 +202,7 @@ export default function Tickets() {
   const metaFor = (ticket: Ticket) =>
     copy.card.metaPattern
       .replace('#{id}', `#${ticket.id}`)
-      .replace('{relativeTime}', formatRelativeTime(ticket.updated_at))
+      .replace('{relativeTime}', formatRelativeTime(ticket.updated_at) || 'just now')
 
   const formatStatus = (status: Ticket['status']) => status.replace('_', ' ')
   const formatPriority = (priority: Ticket['priority']) =>
@@ -210,11 +219,7 @@ export default function Tickets() {
         </div>
       </header>
 
-      {feedback.message && (
-        <p className="c-alert" data-kind={feedback.kind}>
-          {feedback.message}
-        </p>
-      )}
+      {alertMessage && <p className="c-alert" role="alert">{alertMessage}</p>}
 
       <form
         className="c-filters l-stack md:grid md:grid-cols-[2fr_1fr_1fr_auto] md:items-end"
@@ -259,7 +264,7 @@ export default function Tickets() {
         {!isLoading && !isError && (
           <>
             {tickets.length === 0 ? (
-              <div className="c-empty">
+              <div className="c-empty animate-fade-up">
                 <img className="c-empty__illustration" src={barChart} alt="" />
                 <p className="c-empty__title">{emptyTitle}</p>
                 <button
@@ -272,7 +277,7 @@ export default function Tickets() {
               </div>
             ) : (
               tickets.map((ticket) => (
-                <article key={ticket.id} className="c-ticket-card" role="article">
+                <article key={ticket.id} className="c-ticket-card animate-fade-up" role="article">
                   <div className="min-w-0 l-stack">
                     <h3 className="c-ticket-card__title">{ticket.title}</h3>
                     <p className="c-ticket-card__meta">{metaFor(ticket)}</p>

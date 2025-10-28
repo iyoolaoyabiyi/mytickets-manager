@@ -4,7 +4,7 @@ export type TicketPriority = 'high' | 'medium' | 'low'
 export type Ticket = {
   id: number
   title: string
-  description: string
+  description?: string
   status: TicketStatus
   priority: TicketPriority
   created_at: string
@@ -13,7 +13,7 @@ export type Ticket = {
 
 export type TicketDraft = {
   title: string
-  description: string
+  description?: string
   status: TicketStatus
   priority: TicketPriority
 }
@@ -174,7 +174,7 @@ export const createTicket = async (draft: TicketDraft): Promise<Ticket> => {
   const ticket: Ticket = {
     id,
     title: draft.title.trim(),
-    description: draft.description.trim(),
+    description: draft.description?.trim() ?? '',
     status: draft.status,
     priority: draft.priority,
     created_at: timestamp,
@@ -198,7 +198,7 @@ export const updateTicket = async (
   const updated: Ticket = {
     ...tickets[index],
     title: draft.title.trim(),
-    description: draft.description.trim(),
+    description: draft.description?.trim() ?? '',
     status: draft.status,
     priority: draft.priority,
     updated_at: new Date().toISOString()

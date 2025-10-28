@@ -1,4 +1,4 @@
-import { FormEvent, MouseEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import ticketsCopy from '../../../packages/assets/copy/tickets.json'
 import globalCopy from '../../../packages/assets/copy/global.json'
@@ -25,15 +25,16 @@ const defaultDraft = (): TicketDraft => ({
 })
 
 export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }: Props) {
-const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
+  const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
   const [errors, setErrors] = useState({ title: '', status: '', priority: '' })
+  const titleRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     if (!visible) return
     if (mode === 'edit' && ticket) {
       setDraft({
         title: ticket.title,
-        description: ticket.description,
+        description: ticket.description ?? '',
         status: ticket.status,
         priority: ticket.priority
       })
@@ -41,6 +42,7 @@ const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
       setDraft(defaultDraft())
     }
     setErrors({ title: '', status: '', priority: '' })
+    window.setTimeout(() => titleRef.current?.focus(), 0)
   }, [visible, mode, ticket])
 
   const heading = useMemo(
@@ -53,9 +55,24 @@ const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
     [mode]
   )
 
+  const headingId = useMemo(
+    () => (mode === 'edit' && ticket ? `ticket-modal-${ticket.id}` : 'ticket-modal-create'),
+    [mode, ticket]
+  )
+
   if (!visible || typeof document === 'undefined') {
     return null
   }
+
+  useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeydown)
+    return () => window.removeEventListener('keydown', handleKeydown)
+  }, [onClose])
 
   const validate = () => {
     const nextErrors = {
@@ -85,10 +102,16 @@ const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
   }
 
   return createPortal(
-    <div className="c-modal" role="dialog" aria-modal="true" onClick={overlayClick}>
+    <div
+      className="c-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={headingId}
+      onClick={overlayClick}
+    >
       <div className="c-modal__panel" onClick={(event) => event.stopPropagation()}>
         <header className="l-stack">
-          <h2 className="c-modal__title">{heading}</h2>
+          <h2 id={headingId} className="c-modal__title">{heading}</h2>
         </header>
         <form className="l-stack" onSubmit={handleSubmit}>
           <div className="c-field">
@@ -96,6 +119,7 @@ const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
             <input
               id="modal-title"
               value={draft.title}
+              ref={titleRef}
               onChange={(event) => setDraft((prev) => ({ ...prev, title: event.target.value }))}
               placeholder={ticketsCopy.form.placeholders.title}
               className="c-field__control"

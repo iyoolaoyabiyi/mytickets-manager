@@ -1,9 +1,16 @@
 <template>
   <teleport to="body">
-    <div v-if="visible" class="c-modal" role="dialog" aria-modal="true" @click="emitClose">
-      <div class="c-modal__panel" @click.stop>
+    <div
+      v-if="visible"
+      class="c-modal"
+      role="dialog"
+      aria-modal="true"
+      :aria-labelledby="headingId"
+      @click="emitClose"
+    >
+      <div class="c-modal__panel" @click.stop @keydown.esc.stop.prevent="emitClose">
         <header class="l-stack">
-          <h2 class="c-modal__title">{{ heading }}</h2>
+          <h2 :id="headingId" class="c-modal__title">{{ heading }}</h2>
         </header>
         <form class="l-stack" @submit.prevent="handleSubmit">
           <div class="c-field">
@@ -13,6 +20,7 @@
               v-model="draft.title"
               :placeholder="ticketsCopy.form.placeholders.title"
               class="c-field__control"
+              ref="titleInput"
             />
             <p v-if="errors.title" class="c-field__message">{{ errors.title }}</p>
           </div>
@@ -60,7 +68,7 @@
   </teleport>
 </template>
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import ticketsCopy from '../../../packages/assets/copy/tickets.json'
 import globalCopy from '../../../packages/assets/copy/global.json'
 import type { Ticket, TicketDraft, TicketPriority, TicketStatus } from '../../../packages/utils/tickets'
@@ -92,11 +100,19 @@ const errors = reactive<{ title: string; status: string; priority: string }>({
   priority: ''
 })
 
+const titleInput = ref<HTMLInputElement | null>(null)
+
 const statusOptions = ticketsCopy.card.statusTags as TicketStatus[]
 const priorityOptions = ticketsCopy.card.priorityTags as TicketPriority[]
 
 const heading = computed(() =>
   props.mode === 'edit' ? ticketsCopy.form.actions.update : ticketsCopy.actions.new
+)
+
+const headingId = computed(() =>
+  props.mode === 'edit'
+    ? `ticket-modal-edit-${props.ticket?.id ?? 'new'}`
+    : 'ticket-modal-create'
 )
 
 const actionLabel = computed(() =>
@@ -107,7 +123,7 @@ const hydrate = (ticket?: Ticket | null) => {
   const source = ticket
     ? {
         title: ticket.title,
-        description: ticket.description,
+        description: ticket.description ?? '',
         status: ticket.status,
         priority: ticket.priority
       }
@@ -127,6 +143,9 @@ watch(
   (visible) => {
     if (visible) {
       hydrate(props.mode === 'edit' ? props.ticket ?? null : null)
+      nextTick(() => {
+        titleInput.value?.focus()
+      })
     }
   }
 )
@@ -136,6 +155,7 @@ watch(
   (ticket) => {
     if (props.visible && props.mode === 'edit') {
       hydrate(ticket ?? null)
+      nextTick(() => titleInput.value?.focus())
     }
   },
   { immediate: true }
@@ -163,4 +183,18 @@ const handleSubmit = () => {
 const formatStatus = (status: TicketStatus) => status.replace('_', ' ')
 const formatPriority = (priority: TicketPriority) =>
   priority.charAt(0).toUpperCase() + priority.slice(1)
+
+const handleEscape = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && props.visible) {
+    emitClose()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleEscape)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleEscape)
+})
 </script>

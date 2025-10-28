@@ -27,14 +27,24 @@
         aria-label="Primary"
         :data-state="isMenuOpen ? 'open' : 'closed'"
       >
-        <RouterLink
-          v-for="link in links"
-          :key="link.to"
-          :to="link.to"
-          class="c-header__link"
-        >
-          {{ link.label }}
-        </RouterLink>
+        <template v-for="link in links" :key="link.label">
+          <RouterLink
+            v-if="link.action !== 'logout'"
+            :to="link.to"
+            class="c-header__link"
+            @click="handleNavigate"
+          >
+            {{ link.label }}
+          </RouterLink>
+          <button
+            v-else
+            type="button"
+            class="c-header__link"
+            @click="handleLogout"
+          >
+            {{ link.label }}
+          </button>
+        </template>
         <button
           class="c-button c-button--secondary md:hidden"
           type="button"
@@ -48,11 +58,14 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import copy from '../../../packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
+import { logout } from '../../../packages/utils/auth'
+import { pushToast } from '../../../packages/utils/toast'
 
 const route = useRoute()
+const router = useRouter()
 const isMenuOpen = ref(false)
 const theme = ref<Theme>(getStoredTheme())
 
@@ -67,7 +80,7 @@ const links = computed(() => {
   return [
     { to: '/dashboard', label: copy.nav.dashboard },
     { to: '/tickets', label: copy.nav.tickets },
-    { to: '/auth/login', label: copy.nav.logout }
+    { to: '/auth/login', label: copy.nav.logout, action: 'logout' as const }
   ]
 })
 
@@ -86,6 +99,17 @@ const toggleMenu = () => {
 const toggleThemeHandler = () => {
   theme.value = toggleTheme(theme.value)
   persistTheme(theme.value)
+}
+
+const handleNavigate = () => {
+  isMenuOpen.value = false
+}
+
+const handleLogout = async () => {
+  logout()
+  isMenuOpen.value = false
+  pushToast(copy.toasts.authEnd ?? 'Session ended, please login again to continue.', 'info')
+  await router.push('/auth/login')
 }
 
 onMounted(() => {
