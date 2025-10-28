@@ -3,19 +3,34 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ title|default('myTickets Manager') }}</title>
+    <meta name="description" content="{{ meta.description|default('myTickets Manager keeps your support tickets organised, prioritised, and easy to resolve.') }}">
+    <meta name="theme-color" content="{{ meta.theme_color|default('#f5f6ff') }}">
+    {% if meta.canonical is defined %}
+      <link rel="canonical" href="{{ meta.canonical }}">
+    {% endif %}
+    <link rel="icon" type="image/svg+xml" href="/assets/media/icons/ticket.svg" />
+    <title>{{ meta.title|default('myTickets Manager') }}</title>
     <link rel="stylesheet" href="/assets/styles/style.css">
-    {# <link rel="preload" href="{{ asset('fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ asset('fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ asset('fonts/Inter-SemiBold.woff2') }}" as="font" type="font/woff2" crossorigin> #}
+    {% block head_extra %}{% endblock %}
   </head>
-  <body>
+  <body data-page="{{ page_id|default('') }}">
     <a href="#main-content" class="c-skiplink">{{ copyGlobal.a11y.skipLink }}</a>
     {% include 'partials/header.twig' %}
-    <main id="main-content">
+    <main id="main-content" data-props="{{ page_props|default({})|json_encode|e('html_attr') }}">
       {% block content %}{% endblock %}
     </main>
     {% include 'partials/footer.twig' %}
     {% include 'partials/toast.twig' %}
+    {% block page_scripts %}{% endblock %}
+    <script id="ticket-app-config" type="application/json">
+      {{ {
+        'copyGlobal': copyGlobal,
+        'page': {
+          'id': page_id|default(''),
+          'props': page_props|default({})
+        }
+      }|json_encode|raw }}
+    </script>
+    <script type="module" src="/assets/scripts/app.js"></script>
   </body>
 </html>
