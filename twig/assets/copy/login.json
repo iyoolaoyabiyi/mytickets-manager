@@ -1,0 +1,25 @@
+{
+  "route": "/auth/login",
+  "title": "Login",
+  "heading": "Welcome to myTickets Manager",
+  "tagline": "Streamline your support, one ticket at a time",
+  "form": {
+    "labels": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "password": "Enter your password"
+    },
+    "submit": "Login"
+  },
+  "links": {
+    "switch": "Don\u2019t have an account? Get Started"
+  },
+  "demo": "Use demo credentials to explore: demo@mytickets.app \u00b7 demo12345",
+  "errors": {
+    "invalid": "Invalid email or password."
+  },
+  "success": "Welcome back."
+}

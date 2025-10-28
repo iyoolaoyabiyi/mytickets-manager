@@ -1,0 +1,15 @@
+### 1.1 Screens, Routes & Actions (Guards)
+
+
+| Screen    | Purpose                                                                   | Elements                                                                             | Route (Guarded)      | Action                                                                                | On Enter: Unauth                      | On Enter: Auth                |
+| --------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------- | ------------------------------------------------------------------------------------- | ------------------------------------- | ----------------------------- |
+| Landing   | Welcome, brand, quick CTAs to auth.                                       | Header, Hero (title, subtitle, CTAs), wave.svg, 2 decorative circles, Footer.        | / (false)            | verify session token (for header)                                                     | -                                     | -                             |
+| Login     | Authenticate existing user.                                               | Email, Password, Submit, link to Signup, inline errors, toast on failure.            | /auth/login (false)  | login \| set session token \| verify session token                                    | -                                     | Redirect -> /dashboard        |
+| Signup    | Create a mock account                                                     | Email, Password, Confirm Password, Submit, link to Login, inline errors, toast.      | /auth/signup (false) | register \| verify session token                                                      | Redirect -> /auth/login + session msg | Redirect -> /auth/login       |
+| Dashboard | High‑level stats and navigation to Tickets<br>**For stretch:** Add charts | High‑level stats and navigation to Tickets.                                          | /dashboard (true)    | verify session token \| list tickets                                                  | Redirect -> /auth/login + session msg | Load tickets; show stat cards |
+| Tickets   | View list, filter, create and edit tickets inline.                        | Filters (query, status), Form Modal (Create and Edit variant), Ticket cards, toasts. | /tickets (true)      | verify session token \| list tickets \| create ticket \| edit ticket \| delete ticket | Redirect -> /auth/login + session msg | Load tickets; List tickets    |
+
+- Routes (identical for all): 
+- `/`, `/auth/login`, `/auth/signup`, `/dashboard`, `/tickets`.
+- Protected: `/dashboard`, `/tickets`.
+- Guard rule: if no `ticketapp_session` → redirect to `/auth/login` and show expired session message.

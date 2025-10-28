@@ -1,0 +1,29 @@
+{% extends 'base.twig' %}
+{% set c = copySignup %}
+{% block content %}
+<section class="c-auth-card">
+  <h1 class="c-page-header__title">{{ c.title }}</h1>
+  <form class="c-auth-card__form" novalidate>
+    <div class="c-auth-card__fields">
+      <div class="c-field">
+        <label for="email" class="c-field__label">{{ c.form.labels.email }}</label>
+        <input id="email" type="email" placeholder="{{ c.form.placeholders.email }}" class="c-field__control" />
+      </div>
+      <div class="c-field">
+        <label for="password" class="c-field__label">{{ c.form.labels.password }}</label>
+        <input id="password" type="password" placeholder="{{ c.form.placeholders.password }}" class="c-field__control" />
+      </div>
+      <div class="c-field">
+        <label for="confirm" class="c-field__label">{{ c.form.labels.confirm }}</label>
+        <input id="confirm" type="password" placeholder="{{ c.form.placeholders.confirm }}" class="c-field__control" />
+      </div>
+    </div>
+    <div class="c-auth-card__actions">
+      <button class="c-button c-button--primary" type="submit">{{ c.form.submit }}</button>
+      <p class="c-auth-card__switch">
+        <a href="/auth/login">{{ c.links.switch }}</a>
+      </p>
+    </div>
+  </form>
+</section>
+{% endblock %}

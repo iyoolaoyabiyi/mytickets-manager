@@ -1,0 +1,35 @@
+{% extends 'base.twig' %}
+{% set c = copyTicketEdit %}
+{% block content %}
+<section class="l-container py-2xl l-stack">
+  {% include 'partials/page_header.twig' with { title: c.title } %}
+  <nav class="c-breadcrumb" aria-label="Breadcrumb">
+    <a class="underline" href="/tickets">Tickets</a>
+    <span class="c-breadcrumb__sep">/</span>
+    <span>#{{ ticket.id }}</span>
+  </nav>
+
+  <section class="c-card l-stack max-w-xl">
+    <div class="c-field">
+      <label for="e-title" class="c-field__label">{{ c.form.labels.title }}</label>
+      <input id="e-title" class="c-field__control" value="{{ ticket.title }}" />
+    </div>
+    <div class="c-field">
+      <label for="e-desc" class="c-field__label">{{ c.form.labels.description }}</label>
+      <textarea id="e-desc" class="c-field__control" rows="6">{{ ticket.description }}</textarea>
+    </div>
+    <div class="c-field">
+      <label for="e-status" class="c-field__label">{{ c.form.labels.status }}</label>
+      <select id="e-status" class="c-field__control">
+        <option {% if ticket.status == 'open' %}selected{% endif %}>open</option>
+        <option {% if ticket.status == 'in_progress' %}selected{% endif %}>in_progress</option>
+        <option {% if ticket.status == 'closed' %}selected{% endif %}>closed</option>
+      </select>
+    </div>
+    <div class="c-modal__actions">
+      <button class="c-button c-button--primary">Save</button>
+      <a class="c-button c-button--secondary" href="/tickets">Cancel</a>
+    </div>
+  </section>
+</section>
+{% endblock %}

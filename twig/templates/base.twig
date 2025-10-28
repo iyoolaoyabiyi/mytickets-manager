@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" data-theme="{{ theme|default('light') }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title|default('myTickets Manager') }}</title>
+    <link rel="stylesheet" href="/assets/styles/style.css">
+    {# <link rel="preload" href="{{ asset('fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/Inter-SemiBold.woff2') }}" as="font" type="font/woff2" crossorigin> #}
+  </head>
+  <body>
+    <a href="#main-content" class="c-skiplink">{{ copyGlobal.a11y.skipLink }}</a>
+    {% include 'partials/header.twig' %}
+    <main id="main-content">
+      {% block content %}{% endblock %}
+    </main>
+    {% include 'partials/footer.twig' %}
+    {% include 'partials/toast.twig' %}
+  </body>
+</html>

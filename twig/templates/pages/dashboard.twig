@@ -1,0 +1,30 @@
+{% extends 'base.twig' %}
+{% set c = copyDashboard %}
+{% block content %}
+<section class="l-container py-2xl l-stack">
+  {% include 'partials/page_header.twig' with { title: c.title, subtitle: c.subtitle } %}
+  <div class="l-grid-3">
+    <article class="c-stat-card">
+      <div>
+        <span class="c-stat-card__label">{{ c.stats.total }}</span>
+        <div class="c-stat-card__value">{{ stats.total|default(0) }}</div>
+      </div>
+    </article>
+    <article class="c-stat-card">
+      <div>
+        <span class="c-stat-card__label">{{ c.stats.open }}</span>
+        <div class="c-stat-card__value">{{ stats.open|default(0) }}</div>
+      </div>
+    </article>
+    <article class="c-stat-card">
+      <div>
+        <span class="c-stat-card__label">{{ c.stats.resolved }}</span>
+        <div class="c-stat-card__value">{{ stats.resolved|default(0) }}</div>
+      </div>
+    </article>
+  </div>
+  <div class="c-page-header__actions">
+    <a class="c-button c-button--primary" href="/tickets">{{ c.actions.toTickets }}</a>
+  </div>
+</section>
+{% endblock %}

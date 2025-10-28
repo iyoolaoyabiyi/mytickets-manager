@@ -1,0 +1,18 @@
+<header class="c-header">
+  <div class="c-header__inner">
+    <a href="/" class="c-header__brand">{{ copyGlobal.app.name }}</a>
+    <button class="c-header__toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="sr-only">Toggle navigation</span>
+    </button>
+    <nav id="primary-nav" class="c-header__nav" aria-label="Primary">
+      {% if is_auth %}
+        <a href="/dashboard" class="c-header__link">Dashboard</a>
+        <a href="/tickets" class="c-header__link">Tickets</a>
+        <a href="/auth/logout" class="c-header__link">Logout</a>
+      {% else %}
+        <a href="/auth/login" class="c-header__link">Login</a>
+        <a href="/auth/signup" class="c-header__link">Get Started</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
