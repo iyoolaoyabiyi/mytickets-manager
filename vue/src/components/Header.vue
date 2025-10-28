@@ -16,7 +16,7 @@
         <button
           class="c-button c-button--secondary hidden md:inline-flex"
           type="button"
-          @click="toggleTheme"
+          @click="toggleThemeHandler"
         >
           {{ themeToggleLabel }}
         </button>
@@ -38,7 +38,7 @@
         <button
           class="c-button c-button--secondary md:hidden"
           type="button"
-          @click="toggleTheme"
+          @click="toggleThemeHandler"
         >
           {{ themeToggleLabel }}
         </button>
@@ -50,12 +50,11 @@
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import copy from '../../../packages/assets/copy/global.json'
-
-type Theme = 'light' | 'dark'
+import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
 
 const route = useRoute()
 const isMenuOpen = ref(false)
-const theme = ref<Theme>(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light')
+const theme = ref<Theme>(getStoredTheme())
 
 const isAuthRoute = computed(() => route.path.startsWith('/auth'))
 const links = computed(() => {
@@ -84,12 +83,12 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-const toggleTheme = () => {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-  document.documentElement.dataset.theme = theme.value
+const toggleThemeHandler = () => {
+  theme.value = toggleTheme(theme.value)
+  persistTheme(theme.value)
 }
 
 onMounted(() => {
-  document.documentElement.dataset.theme = theme.value
+  persistTheme(theme.value)
 })
 </script>

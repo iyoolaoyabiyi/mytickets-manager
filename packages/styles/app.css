@@ -94,6 +94,8 @@
   --spacing-xs: 0.25rem; --spacing-sm: 0.5rem; --spacing-md: 0.75rem;
   --spacing-lg: 1rem; --spacing-xl: 1.5rem; --spacing-2xl: 2rem;
 
+  --spacing-max: 1440px;
+
   --radius-sm: 0.25rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-pill: 9999px;
 
   --shadow-1: 0 1px 2px rgba(0,0,0,.25);
@@ -107,7 +109,7 @@ html, body { height: 100%; }
 body { @apply font-sans text-fg bg-bg; }
 
 /* Layout helpers */
-@utility l-container { @apply mx-auto max-w-[1440px] px-lg; }
+@utility l-container { @apply mx-auto max-w-max px-lg; }
 @utility l-stack { @apply grid gap-md; }
 @utility l-cluster { @apply flex items-center gap-sm flex-wrap; }
 @utility l-grid-3 { @apply grid gap-lg md:grid-cols-3; }
@@ -123,6 +125,10 @@ body { @apply font-sans text-fg bg-bg; }
 @media (min-width: 768px) {
   .c-header__nav[data-state="open"] { flex-direction: row; gap: var(--spacing-md); }
 }
+
+@utility c-alert { @apply c-card border border-accent bg-accent/10 text-accent; }
+
+@utility c-card--error { @apply border border-red-200 bg-red-50 text-red-700; }
 
 @utility c-footer { @apply bg-surface-2 border-t border-border mt-2xl; }
 @utility c-footer__inner { @apply l-container py-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-sm text-fg-muted; }
@@ -190,6 +196,9 @@ body { @apply font-sans text-fg bg-bg; }
 @utility c-modal__title { @apply text-lg font-semibold; }
 @utility c-modal__text { @apply text-fg-muted mt-sm; }
 @utility c-modal__actions { @apply l-cluster justify-end mt-lg; }
+
+@utility c-modal { @apply fixed inset-0 z-100 bg-black/60 flex items-center justify-center px-lg py-xl; }
+@utility c-modal__panel { @apply c-card w-full max-w-md max-h-[90vh] overflow-y-auto; }
 
 @utility c-empty { @apply c-card text-center py-xl; }
 @utility c-empty__illustration { @apply mx-auto mb-sm; }

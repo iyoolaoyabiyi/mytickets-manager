@@ -1,19 +1,16 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import globalCopy from '../../../packages/assets/copy/global.json'
-
-type Theme = 'light' | 'dark'
+import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
 
 export default function Header() {
   const location = useLocation()
   const isAuthRoute = location.pathname.startsWith('/auth')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [theme, setTheme] = useState<Theme>(
-    document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
-  )
+  const [theme, setTheme] = useState<Theme>(getStoredTheme())
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme
+    persistTheme(theme)
   }, [theme])
 
   const links = useMemo(() => {
@@ -34,8 +31,8 @@ export default function Header() {
   const nextTheme = theme === 'light' ? 'Dark' : 'Light'
   const themeToggleLabel = globalCopy.theme.toggle.replace('{app.theme}', nextTheme)
 
-  const toggleTheme = () => {
-    setTheme((current) => (current === 'light' ? 'dark' : 'light'))
+  const handleThemeToggle = () => {
+    setTheme((current) => toggleTheme(current))
   }
 
   return (
@@ -56,7 +53,7 @@ export default function Header() {
           <button
             className="c-button c-button--secondary hidden md:inline-flex"
             type="button"
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
           >
             {themeToggleLabel}
           </button>
@@ -73,7 +70,7 @@ export default function Header() {
           <button
             className="c-button c-button--secondary md:hidden"
             type="button"
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
           >
             {themeToggleLabel}
           </button>
