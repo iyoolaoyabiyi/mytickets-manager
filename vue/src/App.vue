@@ -9,8 +9,10 @@ import '@packages/styles/app.css'
 <template>
   <a href="#main-content" class="c-skiplink">{{ globalCopy.a11y.skipLink }}</a>
   <Header />
-  <main id="main-content" class="l-container">
-    <router-view />
+  <main id="main-content" class="l-page">
+    <div class="l-container">
+      <router-view />
+    </div>
   </main>
   <Footer />
   <Toast />

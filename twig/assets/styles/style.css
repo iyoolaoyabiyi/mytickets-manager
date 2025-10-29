@@ -372,9 +372,22 @@
     max-width: 1440px;
     padding-inline: var(--spacing-lg);
   }
+  .l-page {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-block: var(--spacing-2xl);
+  }
+  .l-page > .l-container {
+    width: 100%;
+  }
   .c-auth-card {
     margin-inline: auto;
-    max-width: var(--spacing-md);
+    width: 100%;
+    max-width: 700px;
     padding-block: var(--spacing-2xl);
   }
   .c-modal__actions {
@@ -530,6 +543,8 @@
   .c-auth-card__form {
     display: grid;
     gap: var(--spacing-md);
+    width: 100%;
+    min-width: 500px;
     border-radius: var(--radius-lg);
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -581,8 +596,9 @@
   }
   .c-modal__panel {
     max-height: 90vh;
-    width: 100%;
-    max-width: var(--spacing-2xl);
+    width: min(90vw, 700px);
+    max-width: 700px;
+    min-width: 500px;
     animation: fade-in-up .4s ease both;
     overflow-y: auto;
     border-radius: var(--radius-lg);
@@ -599,6 +615,15 @@
     transition-duration: var(--tw-duration, var(--default-transition-duration));
     --tw-duration: 300ms;
     transition-duration: 300ms;
+  }
+  @media (max-width: 640px) {
+    .c-modal__panel {
+      min-width: 100%;
+      width: 100%;
+    }
+    .c-auth-card__form {
+      min-width: 100%;
+    }
   }
   .c-filters__search {
     width: 100%;
@@ -1035,6 +1060,9 @@ body {
   background-color: var(--color-bg);
   font-family: var(--font-sans);
   color: var(--color-fg);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%);
 }

@@ -108,7 +108,7 @@
 html, body { height: 100%; }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { @apply font-sans text-fg bg-bg; -webkit-font-smoothing: antialiased; background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%); }
+body { @apply font-sans text-fg bg-bg min-h-screen flex flex-col; -webkit-font-smoothing: antialiased; background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%); }
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -139,6 +139,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Layout helpers */
 @utility l-container { @apply mx-auto max-w-[1440px] px-lg; }
+@utility l-page { @apply flex flex-1 flex-col items-center justify-center w-full py-2xl; }
+.l-page > .l-container { width: 100%; }
 @utility l-stack { @apply grid gap-md; }
 @utility l-cluster { @apply flex items-center gap-sm flex-wrap; }
 @utility l-grid-3 { @apply grid gap-lg md:grid-cols-3; }
@@ -190,8 +192,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-page-header__subtitle { @apply text-fg-muted; }
 @utility c-page-header__actions { @apply l-cluster justify-end; }
 
-@utility c-auth-card { @apply max-w-md mx-auto py-2xl; }
-@utility c-auth-card__form { @apply c-card l-stack; }
+@utility c-auth-card { @apply w-full max-w-[700px] mx-auto py-2xl; }
+@utility c-auth-card__form { @apply c-card l-stack w-full; }
 @utility c-auth-card__fields { @apply l-stack; }
 @utility c-auth-card__actions { @apply flex items-center justify-between; }
 @utility c-auth-card__switch { @apply text-sm text-fg-muted; }
@@ -231,7 +233,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-modal__actions { @apply l-cluster justify-end mt-lg; }
 
 @utility c-modal { @apply fixed inset-0 z-100 bg-black/60 backdrop-blur-sm flex items-center justify-center px-lg py-xl; }
-@utility c-modal__panel { @apply c-card w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-up; }
+@utility c-modal__panel { @apply c-card w-full max-w-[700px] max-h-[90vh] overflow-y-auto animate-fade-up; }
+.c-modal__panel { min-width: 500px; }
+@media (max-width: 640px) {
+  .c-modal__panel { min-width: 100%; }
+}
+.c-auth-card__form { min-width: 500px; }
+@media (max-width: 640px) {
+  .c-auth-card__form { min-width: 100%; }
+}
 
 @utility c-empty { @apply c-card text-center py-xl; }
 @utility c-empty__illustration { @apply mx-auto mb-sm; }

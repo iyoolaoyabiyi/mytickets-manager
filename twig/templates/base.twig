@@ -16,8 +16,10 @@
   <body data-page="{{ page_id|default('') }}">
     <a href="#main-content" class="c-skiplink">{{ copyGlobal.a11y.skipLink }}</a>
     {% include 'partials/header.twig' %}
-    <main id="main-content" data-props="{{ page_props|default({})|json_encode|e('html_attr') }}">
-      {% block content %}{% endblock %}
+    <main id="main-content" class="l-page" data-props="{{ page_props|default({})|json_encode|e('html_attr') }}">
+      <div class="l-container">
+        {% block content %}{% endblock %}
+      </div>
     </main>
     {% include 'partials/footer.twig' %}
     {% include 'partials/toast.twig' %}
