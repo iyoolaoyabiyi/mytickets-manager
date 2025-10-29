@@ -1,7 +1,6 @@
 **/*node_modules
 **/*vendor
 **/*.obsidian
-**/*.vite
 **/.vite
 **/dist
 **/build

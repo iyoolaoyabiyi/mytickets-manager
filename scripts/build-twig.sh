@@ -20,12 +20,12 @@ mkdir -p "$BUILD_DIR/$APP_NAME"
 # Copy required files and directories
 echo "Copying application files..."
 cp -r \
-    twig/index.php \
-    twig/router.php \
-    twig/.htaccess \
-    twig/vendor \
-    twig/templates \
-    twig/packages \
+    apps/twig/index.php \
+    apps/twig/router.php \
+    apps/twig/.htaccess \
+    apps/twig/vendor \
+    apps/twig/templates \
+    apps/twig/packages \
     "$BUILD_DIR/$APP_NAME/"
 
 # Remove any existing development files
@@ -95,7 +95,7 @@ echo "Upload this file to cPanel and extract to your document root"uo pipefail
 # a subfolder (e.g. public_html/mytickets-manager). The resulting zip will contain
 # a folder named `mytickets-manager` with all PHP, templates, assets and vendor files.
 
-ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR=""
 OUT_DIR="$ROOT_DIR/dist/cpanel/mytickets-manager"
 ZIP_OUT="$ROOT_DIR/dist/mytickets-manager.zip"
 
@@ -104,10 +104,10 @@ rm -rf "$ROOT_DIR/dist/cpanel" "$ZIP_OUT"
 mkdir -p "$OUT_DIR"
 
 echo "Copying twig app files..."
-rsync -a "$ROOT_DIR/twig/index.php" "$ROOT_DIR/twig/router.php" "$ROOT_DIR/twig/.htaccess" "$OUT_DIR/"
-rsync -a "$ROOT_DIR/twig/packages" "$OUT_DIR/"
-rsync -a "$ROOT_DIR/twig/templates" "$OUT_DIR/"
-rsync -a "$ROOT_DIR/twig/vendor" "$OUT_DIR/"
+rsync -a "$ROOT_DIR/apps/twig/index.php" "$ROOT_DIR/apps/twig/router.php" "$ROOT_DIR/apps/twig/.htaccess" "$OUT_DIR/"
+rsync -a "$ROOT_DIR/apps/twig/packages" "$OUT_DIR/"
+rsync -a "$ROOT_DIR/apps/twig/templates" "$OUT_DIR/"
+rsync -a "$ROOT_DIR/apps/twig/vendor" "$OUT_DIR/"
 
 echo "Including packages (copy JSON, media, fonts)..."
 rsync -a "$ROOT_DIR/packages" "$OUT_DIR/"
@@ -146,6 +146,6 @@ echo "Bundle created: $ZIP_OUT"
 echo "Contents (top-level):"
 unzip -l "$ZIP_OUT" | sed -n '1,20p'
 
-echo "Done. Upload and extract $ZIP_OUT into your site's public folder (e.g. public_html)."
+echo "Done. Upload and extract $ZIP_OUT into site's public folder (e.g. public_html)."
 
 exit 0
