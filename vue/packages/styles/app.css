@@ -166,7 +166,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-footer__note { @apply text-sm; }
 
 @utility c-hero { @apply relative overflow-hidden min-h-[600px] flex items-center justify-center; }
-@utility c-hero__inner { @apply w-full max-w-3xl mx-auto text-center flex flex-col items-center gap-md md:gap-lg py-2xl relative z-[1]; }
+@utility c-hero__inner { @apply w-full max-w-3xl mx-auto text-center flex flex-col items-center gap-md md:gap-lg py-2xl relative z-1; }
 @utility c-hero__title { @apply text-4xl md:text-5xl font-semibold; }
 @utility c-hero__subtitle { @apply text-lg text-fg-muted; }
 @utility c-hero__actions { @apply l-cluster justify-center; }
