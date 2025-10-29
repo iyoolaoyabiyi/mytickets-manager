@@ -7,6 +7,7 @@ export default function Landing() {
   const asset = (icon: string) =>
     new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
   const heroWave = asset(landing.hero.media.wave)
+  const [ticketIcon, funnelIcon, checkCircleIcon] = landing.features.map(f => asset(f.icon))
   const heroCirclePrimary = asset(landing.hero.media.decorativeCircle)
   const heroCircleSecondary = asset(
     landing.hero.media.decorativeCircleSecondary ?? landing.hero.media.decorativeCircle
