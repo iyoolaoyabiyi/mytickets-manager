@@ -15,7 +15,7 @@ export default function Landing() {
   const isAuthenticated = Boolean(session)
   const authenticatedCtaLabel = landing.hero.authenticatedCta ?? 'Dashboard'
   const authenticatedHref = landing.hero.authenticatedHref ?? '/dashboard'
-  usePageMeta({ title: 'Home', description: landing.hero.subtitle })
+  usePageMeta({ title: landing.hero.title, description: landing.hero.subtitle })
   return (
     <>
       <section className="c-hero">

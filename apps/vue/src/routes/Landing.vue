@@ -14,7 +14,7 @@ const heroCircleSecondary = asset(copy.hero.media.decorativeCircleSecondary ?? c
 const session = useSession()
 
 usePageMeta({
-  title: 'Home',
+  title: copy.hero.title,
   description: copy.hero.subtitle
 })
 

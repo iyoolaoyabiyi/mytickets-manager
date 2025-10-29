@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "dev": " php -S localhost:5175 router.php",
     "build": "php build/export.php",
     "clean": "php -r \"(new Symfony\\Component\\Filesystem\\Filesystem())->remove(__DIR__ . '/dist'); echo 'dist cleared'.PHP_EOL;\""
   },
