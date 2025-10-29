@@ -111,7 +111,7 @@ const handleLogout = async () => {
   logout()
   isMenuOpen.value = false
   pushToast(copy.toasts.authEnd ?? 'Session ended, please login again to continue.', 'info')
-  await router.push('/auth/login')
+  await router.push('/')
 }
 
 onMounted(() => {

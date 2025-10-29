@@ -24,9 +24,11 @@ const defaultDraft = (): TicketDraft => ({
   priority: 'medium'
 })
 
+const MAX_DESCRIPTION_LENGTH = 500
+
 export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }: Props) {
   const [draft, setDraft] = useState<TicketDraft>(() => defaultDraft())
-  const [errors, setErrors] = useState({ title: '', status: '', priority: '' })
+  const [errors, setErrors] = useState({ title: '', description: '', status: '', priority: '' })
   const titleRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
     } else {
       setDraft(defaultDraft())
     }
-    setErrors({ title: '', status: '', priority: '' })
+    setErrors({ title: '', description: '', status: '', priority: '' })
     window.setTimeout(() => titleRef.current?.focus(), 0)
   }, [visible, mode, ticket])
 
@@ -77,13 +79,18 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
   }
 
   const validate = () => {
+    const trimmedDescription = (draft.description ?? '').trim()
     const nextErrors = {
       title: draft.title.trim() ? '' : globalCopy.validation.titleRequired,
+      description:
+        trimmedDescription.length > MAX_DESCRIPTION_LENGTH
+          ? globalCopy.validation.descriptionLength
+          : '',
       status: draft.status ? '' : globalCopy.validation.statusRequired,
       priority: draft.priority ? '' : globalCopy.validation.priorityRequired
     }
     setErrors(nextErrors)
-    return !nextErrors.title && !nextErrors.status && !nextErrors.priority
+    return !nextErrors.title && !nextErrors.description && !nextErrors.status && !nextErrors.priority
   }
 
   const handleSubmit = (event: FormEvent) => {
@@ -138,6 +145,7 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
               rows={5}
               className="c-field__control"
             ></textarea>
+            {errors.description && <p className="c-field__message">{errors.description}</p>}
           </div>
           <div className="grid gap-sm md:grid-cols-2">
             <div className="c-field">

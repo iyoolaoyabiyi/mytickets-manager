@@ -33,6 +33,7 @@
               rows="5"
               class="c-field__control"
             ></textarea>
+            <p v-if="errors.description" class="c-field__message">{{ errors.description }}</p>
           </div>
           <div class="grid gap-sm md:grid-cols-2">
             <div class="c-field">
@@ -94,8 +95,9 @@ const defaultDraft = (): TicketDraft => ({
 })
 
 const draft = reactive<TicketDraft>(defaultDraft())
-const errors = reactive<{ title: string; status: string; priority: string }>({
+const errors = reactive<{ title: string; description: string; status: string; priority: string }>({
   title: '',
+  description: '',
   status: '',
   priority: ''
 })
@@ -104,6 +106,8 @@ const titleInput = ref<HTMLInputElement | null>(null)
 
 const statusOptions = ticketsCopy.card.statusTags as TicketStatus[]
 const priorityOptions = ticketsCopy.card.priorityTags as TicketPriority[]
+
+const MAX_DESCRIPTION_LENGTH = 500
 
 const heading = computed(() =>
   props.mode === 'edit' ? ticketsCopy.form.actions.update : ticketsCopy.actions.new
@@ -134,6 +138,7 @@ const hydrate = (ticket?: Ticket | null) => {
   draft.status = source.status
   draft.priority = source.priority
   errors.title = ''
+  errors.description = ''
   errors.status = ''
   errors.priority = ''
 }
@@ -163,9 +168,12 @@ watch(
 
 const validate = () => {
   errors.title = draft.title.trim() ? '' : globalCopy.validation.titleRequired
+  const trimmedDescription = draft.description.trim()
+  errors.description =
+    trimmedDescription.length > MAX_DESCRIPTION_LENGTH ? globalCopy.validation.descriptionLength : ''
   errors.status = draft.status ? '' : globalCopy.validation.statusRequired
   errors.priority = draft.priority ? '' : globalCopy.validation.priorityRequired
-  return !errors.title && !errors.status && !errors.priority
+  return !errors.title && !errors.description && !errors.status && !errors.priority
 }
 
 const emitClose = () => emit('close')

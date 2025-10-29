@@ -1349,6 +1349,39 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     color: color-mix(in srgb, var(--accent-weak) 45%, var(--surface-2) 55%);
   }
 }
+@media (max-width: 767px) {
+  .c-hero {
+    display: block;
+    min-height: auto;
+    padding-block: var(--spacing-2xl);
+  }
+  .c-hero__inner {
+    padding-inline: var(--spacing-md);
+    padding-block: var(--spacing-xl);
+    gap: var(--spacing-md);
+  }
+  .c-hero__actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--spacing-sm);
+  }
+  .c-hero__wave {
+    left: 50%;
+    width: 140%;
+    transform: translateX(-50%);
+  }
+  .c-hero__decor {
+    top: auto;
+    bottom: 12%;
+    right: 6%;
+    width: clamp(6rem, 28vw, 10rem);
+  }
+  .c-hero__decor-secondary {
+    top: 6%;
+    left: 6%;
+    width: clamp(5rem, 24vw, 9rem);
+  }
+}
 .c-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-2);

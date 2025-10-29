@@ -38,8 +38,27 @@ This package powers the SPA journey for myTickets, mirroring the screen plan in 
 - Capture component variants in [docs/foundation-pack/05.0-components-and-states-mapping.md](../../docs/foundation-pack/05.0-components-and-states-mapping.md) ahead of implementation.
 - Extend [docs/foundation-pack/05.2-data-models.md](../../docs/foundation-pack/05.2-data-models.md) and shared utilities when modifying domain data so all frameworks remain compatible.
 
-## Run
-```
-pnpm install
-pnpm dev
-```
+## Setup & Execution
+1. `pnpm install`
+2. `pnpm dev` – launches the React SPA on Vite’s dev server.
+3. `pnpm build` – outputs the production bundle to `dist/`.
+
+## Switching Between Frameworks
+- **React SPA**: `cd apps/react && pnpm dev`
+- **Vue SPA**: `cd apps/vue && pnpm dev`
+- **Twig SSR**: `cd apps/twig && pnpm build && php -S localhost:3000 router.php`
+
+## UI Components & State
+- Structural shell (`App.tsx`) wraps every route with `Header`, `Footer`, and the toast region.
+- Screens under `src/routes/` handle page-level concerns; shared UI (e.g. `TicketModal`, `Toast`, `Header`) lives in `src/components/`.
+- Auth and ticket state flow through `@packages/utils/auth` and `@packages/utils/tickets`, emitting events to keep dashboards and ticket feeds in sync.
+- Ticket modals validate required fields and clamp optional descriptions to 500 characters, echoing the shared domain rules.
+
+## Accessibility & Known Issues
+- Skip link, semantic landmarks, focus-visible outlines, and ARIA attributes follow the shared accessibility spec.
+- Toasts announce changes politely, and form errors surface inline for screen-reader discoverability.
+- Known issues: none currently tracked; report discrepancies via the repository issue tracker.
+
+## Demo Credentials
+- Email: `demo@mytickets.app`
+- Password: `demo12345`

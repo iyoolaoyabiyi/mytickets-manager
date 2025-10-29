@@ -38,8 +38,27 @@ This package provides a Vue experience that stays in lockstep with the React SPA
 - Document new component variants in [docs/foundation-pack/05.0-components-and-states-mapping.md](../../docs/foundation-pack/05.0-components-and-states-mapping.md) before implementation.
 - When evolving domain data, adjust [docs/foundation-pack/05.2-data-models.md](../../docs/foundation-pack/05.2-data-models.md) and shared utilities to keep all frameworks in sync.
 
-## Run
-```
-pnpm install
-pnpm dev
-```
+## Setup & Execution
+1. `pnpm install`
+2. `pnpm dev` – boots the Vue SPA through Vite.
+3. `pnpm build` – emits the production bundle to `dist/`.
+
+## Switching Between Frameworks
+- **React SPA**: `cd apps/react && pnpm dev`
+- **Vue SPA**: `cd apps/vue && pnpm dev`
+- **Twig SSR**: `cd apps/twig && pnpm build && php -S localhost:3000 router.php`
+
+## UI Components & State
+- `App.vue` applies the common frame (header, footer, toast stack) and hosts `<router-view />`.
+- Route components in `src/routes/` orchestrate page logic; reusable UI resides in `src/components/`.
+- Composables in `src/composables/` (session, page metadata, guards) encapsulate shared state interactions with `@packages/utils/*`.
+- Ticket modals enforce mandatory fields and restrict optional descriptions to 500 characters for parity with the shared data contract.
+
+## Accessibility & Known Issues
+- Skip link, semantic landmarks, ARIA labelling, and focus outlines are retained per the accessibility brief.
+- Toasts surface auth/ticket feedback with polite live regions; inline errors describe invalid fields.
+- Known issues: none reported at this time.
+
+## Demo Credentials
+- Email: `demo@mytickets.app`
+- Password: `demo12345`

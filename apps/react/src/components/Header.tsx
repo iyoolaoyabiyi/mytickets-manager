@@ -47,7 +47,7 @@ export default function Header() {
     logout()
     setIsMenuOpen(false)
     pushToast(globalCopy.toasts.authEnd, 'info')
-    navigate('/auth/login', { replace: true })
+    navigate('/', { replace: true })
   }
 
   return (

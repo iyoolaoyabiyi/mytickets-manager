@@ -37,3 +37,28 @@ This package powers SSR deployments where PHP/Twig renders the initial HTML shel
 1. Provide the render variables listed above when invoking Twig.
 2. Serve `/packages` statically and include `/packages/styles/app.css` in the base layout.
 3. Mount controller routes via `router.php` or your framework of choice, ensuring data shapes conform to the shared models.
+
+## Setup & Execution
+1. `pnpm install`
+2. `pnpm build` – compiles Tailwind + TypeScript assets into `/build`.
+3. `php -S localhost:3000 router.php` – serves the Twig app with PHP’s built-in server.
+
+## Switching Between Frameworks
+- **React SPA**: `cd apps/react && pnpm dev`
+- **Vue SPA**: `cd apps/vue && pnpm dev`
+- **Twig SSR**: `cd apps/twig && pnpm build && php -S localhost:3000 router.php`
+
+## UI Components & State
+- `templates/base.twig` defines the shared frame (header, footer, toast container, hero wave assets).
+- Page templates in `templates/pages/` render route-specific markup; partials in `templates/partials/` encapsulate reusable atoms.
+- `/packages/assets/scripts/app.ts` hydrates auth, ticket CRUD, and validation via utilities in `@packages/utils/*`, ensuring parity with the SPA implementations.
+- Ticket modals enforce required fields and cap optional descriptions at 500 characters to match the global validation rules.
+
+## Accessibility & Known Issues
+- Semantic headings, landmark elements, skip links, and focus indicators align with the cross-framework accessibility checklist.
+- Toast notifications and inline error messaging provide descriptive feedback for assistive tech.
+- Known issues: none observed; open an issue if discrepancies arise between SSR and SPA behaviour.
+
+## Demo Credentials
+- Email: `demo@mytickets.app`
+- Password: `demo12345`

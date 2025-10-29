@@ -481,6 +481,7 @@ var buildPath = (input) => {
 };
 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 var SESSION_EVENT2 = "ticketapp:session";
+var MAX_DESCRIPTION_LENGTH = 500;
 var applyAuthVisibility = () => {
   const state = requireAuth() ? "auth" : "guest";
   document.documentElement.setAttribute("data-auth-state", state);
@@ -546,7 +547,7 @@ var initHeader = () => {
       event.preventDefault();
       logout();
       pushToast(copyGlobal.toasts?.authEnd || "Session ended, please login again to continue.", "info");
-      window.location.href = buildPath("/auth/login");
+      window.location.href = buildPath("/");
     });
   });
 };
@@ -995,14 +996,20 @@ var initTicketsPage = () => {
     form.appendChild(actions);
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      const trimmedTitle = titleField.control.value.trim();
+      const trimmedDescription = descriptionField.control.value.trim();
       const draft = {
-        title: titleField.control.value.trim(),
-        description: descriptionField.control.value.trim(),
+        title: trimmedTitle,
+        description: trimmedDescription,
         status: statusSelect.value,
         priority: prioritySelect.value
       };
-      if (!draft.title) {
+      if (!trimmedTitle) {
         pushToast(copyGlobal.validation?.titleRequired || "Enter a ticket title.", "error");
+        return;
+      }
+      if (trimmedDescription.length > MAX_DESCRIPTION_LENGTH) {
+        pushToast(copyGlobal.validation?.descriptionLength || "Description is too long.", "error");
         return;
       }
       try {

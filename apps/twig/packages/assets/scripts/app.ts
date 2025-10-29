@@ -91,6 +91,7 @@ const buildPath = (input: string): string => {
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const SESSION_EVENT = 'ticketapp:session'
+const MAX_DESCRIPTION_LENGTH = 500
 
 const applyAuthVisibility = () => {
   const state = requireAuth() ? 'auth' : 'guest'
@@ -173,7 +174,7 @@ const initHeader = () => {
       event.preventDefault()
       logout()
       pushToast(copyGlobal.toasts?.authEnd || 'Session ended, please login again to continue.', 'info')
-      window.location.href = buildPath('/auth/login')
+      window.location.href = buildPath('/')
     })
   })
 }
@@ -689,15 +690,22 @@ const initTicketsPage = () => {
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault()
+      const trimmedTitle = (titleField.control as HTMLInputElement).value.trim()
+      const trimmedDescription = (descriptionField.control as HTMLTextAreaElement).value.trim()
       const draft: TicketDraft = {
-        title: (titleField.control as HTMLInputElement).value.trim(),
-        description: (descriptionField.control as HTMLTextAreaElement).value.trim(),
+        title: trimmedTitle,
+        description: trimmedDescription,
         status: statusSelect.value as TicketDraft['status'],
         priority: prioritySelect.value as TicketDraft['priority']
       }
 
-      if (!draft.title) {
+      if (!trimmedTitle) {
         pushToast(copyGlobal.validation?.titleRequired || 'Enter a ticket title.', 'error')
+        return
+      }
+
+      if (trimmedDescription.length > MAX_DESCRIPTION_LENGTH) {
+        pushToast(copyGlobal.validation?.descriptionLength || 'Description is too long.', 'error')
         return
       }
 
