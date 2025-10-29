@@ -19,7 +19,16 @@ import { pushToast } from '@packages/utils/toast'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { usePageMeta } from '../hooks/usePageMeta'
 
-const statusClass = (status: string) => (status === 'in_progress' ? 'c-tag--in-progress' : `c-tag--${status}`)
+const statusClass = (status: string) => {
+  switch (status) {
+    case "in_progress":
+      return "c-tag--in-progress";
+    case "closed":
+      return "c-tag--closed";  
+    default:
+      return "c-tag--open"
+  }
+}
 
 export default function Tickets() {
   useAuthGuard()

@@ -272,9 +272,16 @@ const formatStatus = (status: Ticket['status']) => status.replace('_', ' ')
 const formatPriority = (priority: Ticket['priority']) =>
   priority.charAt(0).toUpperCase() + priority.slice(1)
 
-const statusClass = (status: Ticket['status']) =>
-  status === 'in_progress' ? 'c-tag--in-progress' : `c-tag--${status}`
-
+const statusClass = (status: string) => {
+  switch (status) {
+    case "in_progress":
+      return "c-tag--in-progress";
+    case "closed":
+      return "c-tag--closed";  
+    default:
+      return "c-tag--open"
+  }
+}
 const handleTicketsChanged = () => {
   void loadTickets()
 }

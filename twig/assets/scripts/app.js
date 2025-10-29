@@ -755,9 +755,19 @@ var renderTicketCard = (template, ticket, copy) => {
       description.hidden = true;
     }
   }
+  const statusClass = (status2) => {
+    switch (status2) {
+      case "in_progress":
+        return "c-tag--in-progress";
+      case "closed":
+        return "c-tag--closed";
+      default:
+        return "c-tag--open";
+    }
+  };
   if (status) {
     status.textContent = ticket.status.replace("_", " ");
-    status.className = `c-tag ${ticket.status === "in_progress" ? "c-tag--in-progress" : `c-tag--${ticket.status}`}`;
+    status.className = `c-tag ${statusClass(ticket.status)}`;
   }
   if (priority) {
     priority.textContent = ticket.priority.charAt(0).toUpperCase() + ticket.priority.slice(1);

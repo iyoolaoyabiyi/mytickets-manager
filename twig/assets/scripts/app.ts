@@ -410,9 +410,20 @@ const renderTicketCard = (template: HTMLTemplateElement, ticket: Ticket, copy: a
     }
   }
 
+  const statusClass = (status: string) => {
+    switch (status) {
+      case "in_progress":
+        return "c-tag--in-progress";
+      case "closed":
+        return "c-tag--closed";  
+      default:
+        return "c-tag--open"
+    }
+  }
+
   if (status) {
     status.textContent = ticket.status.replace('_', ' ')
-    status.className = `c-tag ${ticket.status === 'in_progress' ? 'c-tag--in-progress' : `c-tag--${ticket.status}`}`
+    status.className = `c-tag ${statusClass(ticket.status)}`;
   }
 
   if (priority) {
