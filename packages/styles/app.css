@@ -148,7 +148,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 /* Layout helpers */
 @utility l-container { @apply mx-auto max-w-[1440px] px-lg; }
 @utility l-page {
-  @apply flex flex-1 flex-col items-center justify-center w-full py-2xl;
+  @apply flex flex-1 flex-col items-center justify-center w-full py-2xl overflow-hidden;
   min-height: calc(100dvh - var(--layout-frame-offset, 0px));
 }
 .l-page > .l-container { width: 100%; }
