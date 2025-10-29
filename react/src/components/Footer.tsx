@@ -1,4 +1,4 @@
-import globalCopy from '../../../packages/assets/copy/global.json'
+import globalCopy from '@packages/assets/copy/global.json'
 
 export default function Footer() {
   const year = new Date().getFullYear()

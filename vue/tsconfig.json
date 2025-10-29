@@ -15,7 +15,9 @@
     "noEmit": true,
     "strict": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@packages/*": ["./packages/*"]
+    }
   },
   "include": [
     "src"

@@ -33,10 +33,10 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import copy from '../../../packages/assets/copy/dashboard.json'
-import ticketsCopy from '../../../packages/assets/copy/tickets.json'
-import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
-import { getTicketStats, TICKETS_CHANGED_EVENT } from '../../../packages/utils/tickets'
+import copy from '@packages/assets/copy/dashboard.json'
+import ticketsCopy from '@packages/assets/copy/tickets.json'
+import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import { getTicketStats, TICKETS_CHANGED_EVENT } from '@packages/utils/tickets'
 import { usePageMeta } from '../composables/usePageMeta'
 
 type StatKey = 'total' | 'open' | 'inProgress' | 'closed'

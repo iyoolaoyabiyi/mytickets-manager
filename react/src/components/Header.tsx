@@ -1,9 +1,9 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
-import { logout } from '../../../packages/utils/auth'
-import { pushToast } from '../../../packages/utils/toast'
+import globalCopy from '@packages/assets/copy/global.json'
+import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
+import { logout } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 
 export default function Header() {
   const location = useLocation()

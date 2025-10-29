@@ -69,9 +69,9 @@
 </template>
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
-import ticketsCopy from '../../../packages/assets/copy/tickets.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import type { Ticket, TicketDraft, TicketPriority, TicketStatus } from '../../../packages/utils/tickets'
+import ticketsCopy from '@packages/assets/copy/tickets.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import type { Ticket, TicketDraft, TicketPriority, TicketStatus } from '@packages/utils/tickets'
 
 type ModalMode = 'create' | 'edit'
 

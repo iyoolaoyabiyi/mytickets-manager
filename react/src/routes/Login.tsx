@@ -1,9 +1,9 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import copy from '../../../packages/assets/copy/login.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import { login, requireAuth } from '../../../packages/utils/auth'
-import { pushToast } from '../../../packages/utils/toast'
+import copy from '@packages/assets/copy/login.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import { login, requireAuth } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 import { usePageMeta } from '../hooks/usePageMeta'
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

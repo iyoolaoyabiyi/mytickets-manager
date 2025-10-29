@@ -18,6 +18,7 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["../*"],
+      "@packages/*": ["./packages/*"]
     }
   },
   "include": [

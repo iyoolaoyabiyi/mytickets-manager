@@ -1,0 +1,44 @@
+{
+  "route": "/",
+  "hero": {
+    "title": "Track. Organize. Resolve.",
+    "subtitle": "A simple, consistent way to manage tickets across teams and devices.",
+    "primaryCta": "Get Started",
+    "secondaryCta": "Login",
+    "media": {
+      "wave": "wave.svg",
+      "decorativeCircle": "circle-1.svg"
+    }
+  },
+  "features": [
+    {
+      "title": "Track tickets",
+      "body": "See every ticket at a glance with clear statuses and filters.",
+      "icon": "icons/ticket.svg"
+    },
+    {
+      "title": "Organize work",
+      "body": "Create, edit, and reorder tickets with inline forms and bulk actions.",
+      "icon": "icons/funnel.svg"
+    },
+    {
+      "title": "Resolve faster",
+      "body": "Focus on what matters with simple flows and helpful feedback.",
+      "icon": "icons/check-circle.svg"
+    }
+  ],
+  "howItWorks": [
+    {
+      "title": "Create your account",
+      "body": "Sign up in seconds to start managing tickets."
+    },
+    {
+      "title": "Add your first ticket",
+      "body": "Capture a title, optional details, and set a status."
+    },
+    {
+      "title": "Track and resolve",
+      "body": "Use filters and quick edits to keep work moving."
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import landing from '../../../packages/assets/copy/landing.json'
-import wave from '../../../packages/assets/media/wave.svg'
-import circle from '../../../packages/assets/media/circle-1.svg'
+import landing from '@packages/assets/copy/landing.json'
+import wave from '@packages/assets/media/wave.svg'
+import circle from '@packages/assets/media/circle-1.svg'
 import { usePageMeta } from '../hooks/usePageMeta'
 
 export default function Landing() {
   const asset = (icon: string) =>
-    new URL(`../../../packages/assets/media/${icon}`, import.meta.url).toString()
+    new URL(`@packages/assets/media/${icon}`, import.meta.url).toString()
   usePageMeta({ title: 'Home', description: landing.hero.subtitle })
   return (
     <>

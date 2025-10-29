@@ -3,7 +3,10 @@
 **/*.obsidian
 **/*.vite
 **/.vite
+**/dist
+**/build
 **/*.env
 docs/copy.md
 .cache/
 **/tsconfig.tsbuildinfo
+./packages

@@ -1,6 +1,6 @@
 import { onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { makeCanonical, updateMeta } from '../../../packages/utils/meta'
+import { makeCanonical, updateMeta } from '@packages/utils/meta'
 
 type Meta = {
   title: string

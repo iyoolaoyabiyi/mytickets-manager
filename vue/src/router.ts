@@ -4,9 +4,9 @@ import Login from './routes/Login.vue'
 import Signup from './routes/Signup.vue'
 import Dashboard from './routes/Dashboard.vue'
 import Tickets from './routes/Tickets.vue'
-import globalCopy from '../../packages/assets/copy/global.json'
-import { peekSession, requireAuth } from '../../packages/utils/auth'
-import { pushToast } from '../../packages/utils/toast'
+import globalCopy from '@packages/assets/copy/global.json'
+import { peekSession, requireAuth } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 
 const router = createRouter({
   history: createWebHistory(),

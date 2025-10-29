@@ -1,8 +1,8 @@
 import { FormEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import ticketsCopy from '../../../packages/assets/copy/tickets.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import type { Ticket, TicketDraft, TicketPriority, TicketStatus } from '../../../packages/utils/tickets'
+import ticketsCopy from '@packages/assets/copy/tickets.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import type { Ticket, TicketDraft, TicketPriority, TicketStatus } from '@packages/utils/tickets'
 
 type ModalMode = 'create' | 'edit'
 

@@ -81,10 +81,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import copy from '../../../packages/assets/copy/signup.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import { signup } from '../../../packages/utils/auth'
-import { pushToast } from '../../../packages/utils/toast'
+import copy from '@packages/assets/copy/signup.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import { signup } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 import { usePageMeta } from '../composables/usePageMeta'
 
 usePageMeta({

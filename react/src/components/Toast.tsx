@@ -4,7 +4,7 @@ import {
   subscribeToastDismissals,
   subscribeToasts,
   type ToastMessage
-} from '../../../packages/utils/toast'
+} from '@packages/utils/toast'
 
 type ToastState = ToastMessage & { leaving: boolean }
 

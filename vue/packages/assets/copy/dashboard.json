@@ -1,0 +1,15 @@
+{
+  "route": "/dashboard",
+  "title": "Dashboard",
+  "subtitle": "High-level overview of your tickets.",
+  "stats": {
+    "total": "Total tickets",
+    "open": "Open",
+    "inProgress": "In progress",
+    "closed": "Closed"
+  },
+  "actions": {
+    "toTickets": "Go to Tickets"
+  },
+  "empty": "You have no tickets yet. Create your first ticket to see stats here."
+}

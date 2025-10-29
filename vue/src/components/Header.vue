@@ -59,10 +59,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import copy from '../../../packages/assets/copy/global.json'
-import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '../../../packages/utils/theme'
-import { logout } from '../../../packages/utils/auth'
-import { pushToast } from '../../../packages/utils/toast'
+import copy from '@packages/assets/copy/global.json'
+import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
+import { logout } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 
 const route = useRoute()
 const router = useRouter()

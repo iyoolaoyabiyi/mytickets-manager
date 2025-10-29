@@ -6,7 +6,8 @@ import path from 'path';
 export default defineConfig({ 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../'), 
+      '@': path.resolve(__dirname, '../'),
+      '@packages': path.resolve(__dirname, './packages'),
     },
   },
   plugins: [react(), tailwindcss()],

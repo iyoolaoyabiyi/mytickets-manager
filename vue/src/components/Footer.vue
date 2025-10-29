@@ -12,6 +12,6 @@
   </footer>
 </template>
 <script setup lang="ts">
-import copy from '../../../packages/assets/copy/global.json'
+import copy from '@packages/assets/copy/global.json'
 const yearText = copy.footer.copyright.replace('{year}', String(new Date().getFullYear()))
 </script>

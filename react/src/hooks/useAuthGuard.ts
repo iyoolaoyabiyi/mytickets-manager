@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-// import globalCopy from '../../packages/assets/copy/global.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import { peekSession, requireAuth } from '../../../packages/utils/auth'
-import { pushToast } from '../../../packages/utils/toast'
+// import globalCopy from '@packages/assets/copy/global.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import { peekSession, requireAuth } from '@packages/utils/auth'
+import { pushToast } from '@packages/utils/toast'
 
 export const useAuthGuard = () => {
   const location = useLocation()

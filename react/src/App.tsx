@@ -1,8 +1,8 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Toast from './components/Toast'
-import globalCopy from '../../packages/assets/copy/global.json'
-import '@/packages/styles/app.css'
+import globalCopy from '@packages/assets/copy/global.json'
+import '@packages/styles/app.css'
 
 export default function App({ children }: { children: React.ReactNode }) {
   return (

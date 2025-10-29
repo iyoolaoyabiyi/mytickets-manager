@@ -105,9 +105,9 @@
 </template>
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
-import copy from '../../../packages/assets/copy/tickets.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
+import copy from '@packages/assets/copy/tickets.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import barChart from '@packages/assets/media/icons/bar-chart.svg'
 import TicketModal from '../components/TicketModal.vue'
 import {
   createTicket,
@@ -119,9 +119,9 @@ import {
   type Ticket,
   type TicketDraft,
   type TicketFilters
-} from '../../../packages/utils/tickets'
-import { formatRelativeTime } from '../../../packages/utils/time'
-import { pushToast } from '../../../packages/utils/toast'
+} from '@packages/utils/tickets'
+import { formatRelativeTime } from '@packages/utils/time'
+import { pushToast } from '@packages/utils/toast'
 import { usePageMeta } from '../composables/usePageMeta'
 
 usePageMeta({

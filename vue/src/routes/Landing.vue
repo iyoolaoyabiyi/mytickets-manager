@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { RouterLink } from 'vue-router'
-  import copy from '../../../packages/assets/copy/landing.json'
-  import circle from '../../../packages/assets/media/circle-1.svg';
-  import wave from '../../../packages/assets/media/wave.svg';
+  import copy from '@packages/assets/copy/landing.json'
+  import circle from '@packages/assets/media/circle-1.svg';
+  import wave from '@packages/assets/media/wave.svg';
   import { usePageMeta } from '../composables/usePageMeta'
 
   const asset = (icon: string) => {
-    return new URL(`../../../packages/assets/media/${icon}`, import.meta.url).toString()
+    return new URL(`@packages/assets/media/${icon}`, import.meta.url).toString()
   }
 
   usePageMeta({

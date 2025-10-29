@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { makeCanonical, updateMeta } from '../../../packages/utils/meta'
+import { makeCanonical, updateMeta } from '@packages/utils/meta'
 
 type MetaOptions = {
   title: string

@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import copy from '../../../packages/assets/copy/tickets.json'
-import globalCopy from '../../../packages/assets/copy/global.json'
-import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
+import copy from '@packages/assets/copy/tickets.json'
+import globalCopy from '@packages/assets/copy/global.json'
+import barChart from '@packages/assets/media/icons/bar-chart.svg'
 import TicketModal from '../components/TicketModal'
 import {
   createTicket,
@@ -13,9 +13,9 @@ import {
   type Ticket,
   type TicketDraft,
   type TicketFilters
-} from '../../../packages/utils/tickets'
-import { formatRelativeTime } from '../../../packages/utils/time'
-import { pushToast } from '../../../packages/utils/toast'
+} from '@packages/utils/tickets'
+import { formatRelativeTime } from '@packages/utils/time'
+import { pushToast } from '@packages/utils/toast'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { usePageMeta } from '../hooks/usePageMeta'
 

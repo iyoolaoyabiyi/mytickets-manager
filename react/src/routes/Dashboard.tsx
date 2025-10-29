@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import copy from '../../../packages/assets/copy/dashboard.json'
-import ticketsCopy from '../../../packages/assets/copy/tickets.json'
-import barChart from '../../../packages/assets/media/icons/bar-chart.svg'
-import { getTicketStats, TICKETS_CHANGED_EVENT } from '../../../packages/utils/tickets'
+import copy from '@packages/assets/copy/dashboard.json'
+import ticketsCopy from '@packages/assets/copy/tickets.json'
+import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import { getTicketStats, TICKETS_CHANGED_EVENT } from '@packages/utils/tickets'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { usePageMeta } from '../hooks/usePageMeta'
 
