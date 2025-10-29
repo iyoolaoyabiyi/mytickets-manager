@@ -3,7 +3,7 @@ set -e
 
 # Directory of this script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR/.."  # Go to project root
+cd "$DIR/.."  # Go to dist in project root
 
 # Configuration
 APP_NAME="mytickets-manager"
@@ -25,8 +25,7 @@ cp -r \
     twig/.htaccess \
     twig/vendor \
     twig/templates \
-    twig/assets \
-    packages \
+    twig/packages \
     "$BUILD_DIR/$APP_NAME/"
 
 # Remove any existing development files
@@ -82,7 +81,7 @@ EOF
 # Create zip archive
 echo "Creating zip archive..."
 cd "$BUILD_DIR"
-zip -r "../$ZIP_NAME" "$APP_NAME"
+zip -r "../dist/$ZIP_NAME" "$APP_NAME"
 cd ..
 
 # Cleanup
@@ -96,7 +95,7 @@ echo "Upload this file to cPanel and extract to your document root"uo pipefail
 # a subfolder (e.g. public_html/mytickets-manager). The resulting zip will contain
 # a folder named `mytickets-manager` with all PHP, templates, assets and vendor files.
 
-ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 OUT_DIR="$ROOT_DIR/dist/cpanel/mytickets-manager"
 ZIP_OUT="$ROOT_DIR/dist/mytickets-manager.zip"
 
@@ -106,7 +105,7 @@ mkdir -p "$OUT_DIR"
 
 echo "Copying twig app files..."
 rsync -a "$ROOT_DIR/twig/index.php" "$ROOT_DIR/twig/router.php" "$ROOT_DIR/twig/.htaccess" "$OUT_DIR/"
-rsync -a "$ROOT_DIR/twig/assets" "$OUT_DIR/"
+rsync -a "$ROOT_DIR/twig/packages" "$OUT_DIR/"
 rsync -a "$ROOT_DIR/twig/templates" "$OUT_DIR/"
 rsync -a "$ROOT_DIR/twig/vendor" "$OUT_DIR/"
 
