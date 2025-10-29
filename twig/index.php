@@ -9,27 +9,52 @@ $twig   = new Environment($loader, ['cache' => false]);
 
 // Figure out the public path prefix where this script runs (supports subfolders)
 $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
-$scriptDirRaw = $scriptName === '' ? '' : str_replace('\\', '/', dirname($scriptName));
-if ($scriptDirRaw === '.' || $scriptDirRaw === '/') {
-  $scriptDirRaw = '';
-}
-$scriptDir = $scriptDirRaw === '' ? '' : rtrim($scriptDirRaw, '/');
+$requestUri = str_replace('\\', '/', $_SERVER['REQUEST_URI'] ?? '/');
 
-$mountBaseRaw = $scriptDir === '' ? '' : str_replace('\\', '/', dirname($scriptDir));
-if ($mountBaseRaw === '.' || $mountBaseRaw === '/') {
-  $mountBaseRaw = '';
+// Direct detection: if we're under /mytickets-manager/, use that as the base
+if (strpos($scriptName, '/mytickets-manager/') === 0 || strpos($requestUri, '/mytickets-manager/') === 0) {
+    $pathBase = '/mytickets-manager';
+    $scriptDir = '/mytickets-manager';
+    $assetBaseUrl = '/mytickets-manager/assets/';
+} else {
+    // Fallback to computed paths (for different deployment layouts)
+    $scriptDirRaw = $scriptName === '' ? '' : str_replace('\\', '/', dirname($scriptName));
+    if ($scriptDirRaw === '.' || $scriptDirRaw === '/') {
+        $scriptDirRaw = '';
+    }
+    $scriptDir = $scriptDirRaw === '' ? '' : rtrim($scriptDirRaw, '/');
+    $pathBase = $scriptDir; // For this layout, pathBase is the same as scriptDir
+    $assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/assets/';
 }
-$pathBase = $mountBaseRaw === '' ? '' : rtrim($mountBaseRaw, '/');
 
 $assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/assets/';
 
 // helper to read copy json
 $copy = function(string $name) {
-  $path = realpath(dirname(__DIR__) . "/packages/assets/copy/{$name}.json");
-  if (!$path || !is_file($path)) {
-    return null; // or [] or throw an exception
+  // Try a few candidate locations (supports slightly different deploys)
+  $candidates = [
+    dirname(__DIR__) . "/packages/assets/copy/{$name}.json",
+    __DIR__ . "/../packages/assets/copy/{$name}.json",
+    __DIR__ . "/assets/copy/{$name}.json",
+  ];
+
+  foreach ($candidates as $candidate) {
+    $path = realpath($candidate);
+    if ($path && is_file($path)) {
+      $contents = file_get_contents($path);
+      $json = json_decode($contents, true);
+      if (json_last_error() === JSON_ERROR_NONE) {
+        return $json;
+      }
+      // Invalid JSON — log and return empty array to avoid fatal errors in templates
+      error_log("Invalid JSON in copy file {$path}: " . json_last_error_msg());
+      return [];
+    }
   }
-  return json_decode(file_get_contents($path), true);
+
+  // Not found — log and return empty array so templates can render without fatal errors
+  error_log("Copy file not found: {$name}.json (looked in candidates)");
+  return [];
 };
 
 // preload copy
@@ -169,6 +194,13 @@ switch ($uri) {
         'path_base'      => $pathBase,
       ]);
       break;
+    }
+
+    // Check if this might be a route without .php
+    $tryWithPhp = $uri . '.php';
+    if (is_file(__DIR__ . $tryWithPhp)) {
+        header("Location: $pathBase$tryWithPhp");
+        exit;
     }
 
     http_response_code(404);
