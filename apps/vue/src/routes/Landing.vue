@@ -7,7 +7,8 @@ import { useSession } from '../composables/useSession'
 
 const mediaAssets = import.meta.glob('../../packages/assets/media/**/*', {
   eager: true,
-  as: 'url'
+  query: '?url',
+  import: 'default'
 }) as Record<string, string>
 
 const asset = (icon?: string | null) => {
