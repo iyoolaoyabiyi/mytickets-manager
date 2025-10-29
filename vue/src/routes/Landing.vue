@@ -1,18 +1,19 @@
 <script setup lang="ts">
-  import { RouterLink } from 'vue-router'
-  import copy from '@packages/assets/copy/landing.json'
-  import circle from '@packages/assets/media/circle-1.svg';
-  import wave from '@packages/assets/media/wave.svg';
-  import { usePageMeta } from '../composables/usePageMeta'
+import { RouterLink } from 'vue-router'
+import copy from '@packages/assets/copy/landing.json'
+import { usePageMeta } from '../composables/usePageMeta'
 
-  const asset = (icon: string) => {
-    return new URL(`@packages/assets/media/${icon}`, import.meta.url).toString()
-  }
+const asset = (icon: string) =>
+  new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
 
-  usePageMeta({
-    title: 'Home',
-    description: copy.hero.subtitle
-  })
+const heroWave = asset(copy.hero.media.wave)
+const heroCirclePrimary = asset(copy.hero.media.decorativeCircle)
+const heroCircleSecondary = heroCirclePrimary
+
+usePageMeta({
+  title: 'Home',
+  description: copy.hero.subtitle
+})
 </script>
 <template>
   <section class="c-hero">
@@ -24,8 +25,9 @@
         <RouterLink to="/auth/login" class="c-button c-button--secondary">{{ copy.hero.secondaryCta }}</RouterLink>
       </div>
     </div>
-    <img :src="wave" class="c-hero__wave" alt="" />
-    <img :src="circle" class="c-hero__decor" alt="" />
+    <img :src="heroWave" class="c-hero__wave" alt="" aria-hidden="true" />
+    <img :src="heroCirclePrimary" class="c-hero__decor" alt="" aria-hidden="true" />
+    <img :src="heroCircleSecondary" class="c-hero__decor-secondary" alt="" aria-hidden="true" />
   </section>
 
   <section class="l-stack py-2xl">

@@ -43,7 +43,7 @@
     <div class="c-auth-card__actions">
       <button class="c-button c-button--primary" type="submit" data-button="submit">{{ c.form.submit }}</button>
       <p class="c-auth-card__switch">
-        <a href="/auth/signup">{{ c.links.switch }}</a>
+        <a href="{{ path_base|default('') }}/auth/signup">{{ c.links.switch }}</a>
       </p>
     </div>
   </form>

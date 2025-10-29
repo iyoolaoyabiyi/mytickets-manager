@@ -37,6 +37,7 @@ export default function Tickets() {
     { open: false, mode: 'create', ticket: null }
   )
   const didMount = useRef(false)
+  const currentRequestIdRef = useRef(0)
 
   const statusOptions = useMemo(
     () =>
@@ -68,37 +69,58 @@ export default function Tickets() {
   const clearAlert = () => setAlertMessage('')
 
   const loadTickets = useCallback(async (criteria?: TicketFilters) => {
+    const requestId = Date.now()
+    currentRequestIdRef.current = requestId
+
     const nextFilters = criteria ?? filtersRef.current
     filtersRef.current = nextFilters
     setStatus('loading')
     try {
       const data = await listTickets({ ...nextFilters })
-      setTickets(data)
-      setStatus('ready')
-      setErrorMessage('')
-      clearAlert()
-    } catch {
-      setStatus('error')
-      setErrorMessage(globalCopy.toasts.loadError)
-      setAlertMessage(globalCopy.toasts.loadError)
-      pushToast(globalCopy.toasts.loadError, 'error')
+      // Only update state if this is still the most recent request
+      if (currentRequestIdRef.current === requestId) {
+        setTickets(data)
+        setStatus('ready')
+        setErrorMessage('')
+        clearAlert()
+      }
+    } catch (error) {
+      if (currentRequestIdRef.current === requestId) {
+        setStatus('error')
+        setErrorMessage(globalCopy.toasts.loadError)
+        setAlertMessage(globalCopy.toasts.loadError)
+        pushToast(globalCopy.toasts.loadError, 'error')
+      }
     }
   }, [])
 
   useEffect(() => {
-    let active = true
+    let mounted = true
     ;(async () => {
       await loadTickets()
-      if (active) {
+      if (mounted) {
         didMount.current = true
       }
     })()
-    const handler = () => loadTickets(filtersRef.current)
+
+    let debounceTimer: number | undefined
+
+    const handler = () => {
+      // Debounce the ticket reload on change events
+      window.clearTimeout(debounceTimer)
+      debounceTimer = window.setTimeout(() => {
+        if (mounted) {
+          loadTickets(filtersRef.current)
+        }
+      }, 50)
+    }
+
     window.addEventListener(TICKETS_CHANGED_EVENT, handler)
     return () => {
+      mounted = false
       window.removeEventListener(TICKETS_CHANGED_EVENT, handler)
       window.clearTimeout(searchTimer.current)
-      active = false
+      window.clearTimeout(debounceTimer)
     }
   }, [loadTickets])
 
@@ -168,7 +190,7 @@ export default function Tickets() {
         pushToast(globalCopy.toasts.createSuccess, 'success')
       }
       closeModal()
-      await loadTickets()
+      // Let the TICKETS_CHANGED_EVENT trigger the reload instead
     } catch {
       setAlertMessage(globalCopy.toasts.validation)
       pushToast(globalCopy.toasts.validation, 'error')
@@ -178,11 +200,12 @@ export default function Tickets() {
   const handleDelete = async (id: number) => {
     const confirmMessage = `${globalCopy.confirm.delete.title}\n${globalCopy.confirm.delete.body}`
     if (!window.confirm(confirmMessage)) return
+
     setDeletingId(id)
     try {
       await deleteTicket(id)
       pushToast(globalCopy.toasts.deleteSuccess, 'success')
-      await loadTickets()
+      // Let the TICKETS_CHANGED_EVENT trigger the reload instead
     } catch {
       setAlertMessage(globalCopy.toasts.loadError)
       pushToast(globalCopy.toasts.loadError, 'error')
@@ -209,7 +232,7 @@ export default function Tickets() {
     priority.charAt(0).toUpperCase() + priority.slice(1)
 
   return (
-    <section className="l-container py-2xl l-stack">
+    <section className="py-2xl l-stack">
       <header className="c-page-header">
         <h1 className="c-page-header__title">{copy.title}</h1>
         <div className="c-page-header__actions">

@@ -202,10 +202,17 @@ export const subscribeSession = (listener: (session: Session | null) => void) =>
 }
 
 export const requireAuth = () => {
-  const session = restoreSession()
-  return !!session
+  // Read session without triggering side-effects (no broadcast/logout)
+  const session = readSession()
+  if (!session) return false
+  return !isExpired(session)
 }
 
-export const getCurrentSession = () => restoreSession()
+export const getCurrentSession = () => {
+  const session = readSession()
+  if (!session || isExpired(session)) return null
+  return session
+}
+
 
 export const peekSession = (): Session | null => readSession()

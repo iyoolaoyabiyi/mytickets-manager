@@ -9,7 +9,7 @@ export default function App({ children }: { children: React.ReactNode }) {
     <>
       <a href="#main-content" className="c-skiplink">{globalCopy.a11y.skipLink}</a>
       <Header />
-      <main id="main-content">{children}</main>
+      <main id="main-content" className="l-container">{children}</main>
       <Footer />
       <Toast />
     </>

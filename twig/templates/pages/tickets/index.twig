@@ -71,7 +71,7 @@
 
 <template id="ticket-empty-template">
   <div class="c-empty animate-fade-up">
-    <img class="c-empty__illustration" src="/assets/media/icons/bar-chart.svg" alt="" />
+    <img class="c-empty__illustration" src="{{ asset_base_url|default('/assets/') ~ 'media/icons/bar-chart.svg' }}" alt="" />
     <p class="c-empty__title" data-empty-title>{{ c.empty.primary.title }}</p>
     <button class="c-button c-button--primary" type="button" data-action="primary"></button>
   </div>

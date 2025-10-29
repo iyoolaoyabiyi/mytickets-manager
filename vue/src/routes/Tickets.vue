@@ -1,5 +1,5 @@
 <template>
-  <section class="l-container py-2xl l-stack">
+  <section class="py-2xl l-stack">
     <header class="c-page-header">
       <h1 class="c-page-header__title">{{ copy.title }}</h1>
       <div class="c-page-header__actions">

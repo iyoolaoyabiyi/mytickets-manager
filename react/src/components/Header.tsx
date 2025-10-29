@@ -1,34 +1,41 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import globalCopy from '@packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
-import { logout } from '@packages/utils/auth'
+import { getCurrentSession, logout, subscribeSession, type Session } from '@packages/utils/auth'
 import { pushToast } from '@packages/utils/toast'
 
 export default function Header() {
-  const location = useLocation()
   const navigate = useNavigate()
-  const isAuthRoute = location.pathname.startsWith('/auth')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [theme, setTheme] = useState<Theme>(getStoredTheme())
+  const [session, setSession] = useState<Session | null>(getCurrentSession())
+  const isAuthenticated = Boolean(session)
 
   useEffect(() => {
     persistTheme(theme)
   }, [theme])
 
+  useEffect(() => {
+    const unsubscribe = subscribeSession((next) => setSession(next))
+    return () => {
+      unsubscribe?.()
+    }
+  }, [])
+
   const links = useMemo(() => {
-    if (isAuthRoute) {
+    if (isAuthenticated) {
       return [
-        { to: '/auth/login', label: globalCopy.nav.login },
-        { to: '/auth/signup', label: globalCopy.nav.signup }
+        { to: '/dashboard', label: globalCopy.nav.dashboard },
+        { to: '/tickets', label: globalCopy.nav.tickets },
+        { to: '/auth/login', label: globalCopy.nav.logout, action: 'logout' as const }
       ]
     }
     return [
-      { to: '/dashboard', label: globalCopy.nav.dashboard },
-      { to: '/tickets', label: globalCopy.nav.tickets },
-      { to: '/auth/login', label: globalCopy.nav.logout, action: 'logout' as const }
+      { to: '/auth/signup', label: globalCopy.nav.signup },
+      { to: '/auth/login', label: globalCopy.nav.login }
     ]
-  }, [isAuthRoute])
+  }, [isAuthenticated])
 
   const menuLabel = isMenuOpen ? globalCopy.nav.toggle.close : globalCopy.nav.toggle.open
   const nextTheme = theme === 'light' ? 'Dark' : 'Light'
@@ -44,6 +51,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout()
+    setSession(null)
     setIsMenuOpen(false)
     pushToast(globalCopy.toasts.authEnd, 'info')
     navigate('/auth/login', { replace: true })

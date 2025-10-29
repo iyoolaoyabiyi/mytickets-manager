@@ -60,11 +60,9 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
     [mode, ticket]
   )
 
-  if (!visible || typeof document === 'undefined') {
-    return null
-  }
-
   useEffect(() => {
+    if (!visible) return
+    
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose()
@@ -72,7 +70,11 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
     }
     window.addEventListener('keydown', handleKeydown)
     return () => window.removeEventListener('keydown', handleKeydown)
-  }, [onClose])
+  }, [onClose, visible])
+
+  if (!visible || typeof document === 'undefined') {
+    return null
+  }
 
   const validate = () => {
     const nextErrors = {

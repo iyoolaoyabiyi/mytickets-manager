@@ -6,19 +6,19 @@
     <h1 class="c-hero__title">{{ c.hero.title }}</h1>
     <p class="c-hero__subtitle">{{ c.hero.subtitle }}</p>
     <div class="c-hero__actions">
-      <a href="/auth/signup" class="c-button c-button--primary">{{ c.hero.primaryCta }}</a>
-      <a href="/auth/login" class="c-button c-button--secondary">{{ c.hero.secondaryCta }}</a>
+      <a href="{{ path_base|default('') }}/auth/signup" class="c-button c-button--primary">{{ c.hero.primaryCta }}</a>
+      <a href="{{ path_base|default('') }}/auth/login" class="c-button c-button--secondary">{{ c.hero.secondaryCta }}</a>
     </div>
   </div>
-  <img src="/assets/media/{{ c.hero.media.wave }}" class="c-hero__wave" alt="" />
-  <img src="/assets/media/{{ c.hero.media.decorativeCircle }}" class="c-hero__decor" alt="" />
+  <img src="{{ asset_base_url|default('/assets/') ~ 'media/' ~ c.hero.media.wave }}" class="c-hero__wave" alt="" />
+  <img src="{{ asset_base_url|default('/assets/') ~ 'media/' ~ c.hero.media.decorativeCircle }}" class="c-hero__decor" alt="" />
 </section>
 
 <section class="l-container l-stack py-2xl">
   <div class="l-grid-3">
     {% for f in c.features %}
       <article class="c-feature-card animate-fade-up">
-        <img src="/assets/media/{{ f.icon }}" class="c-feature-card__icon" alt="" />
+        <img src="{{ asset_base_url|default('/assets/') ~ 'media/' ~ f.icon }}" class="c-feature-card__icon" alt="" />
         <h3 class="c-feature-card__title">{{ f.title }}</h3>
         <p class="c-feature-card__body">{{ f.body }}</p>
       </article>

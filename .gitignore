@@ -10,3 +10,4 @@ docs/copy.md
 .cache/
 **/tsconfig.tsbuildinfo
 ./packages
+deploy

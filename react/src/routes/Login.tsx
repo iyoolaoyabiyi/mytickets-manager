@@ -45,10 +45,10 @@ export default function Login() {
     return !nextErrors.email && !nextErrors.password
   }, [form.email, form.password])
 
-  const handleChange = (event: FormEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget
     setForm((prev) => ({ ...prev, [name]: value }))
-  }
+  }, [])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -88,7 +88,7 @@ export default function Login() {
               id="login-email"
               name="email"
               value={form.email}
-              onInput={handleChange}
+              onChange={handleChange}
               type="email"
               placeholder={copy.form.placeholders.email}
               className="c-field__control"
@@ -104,7 +104,7 @@ export default function Login() {
               id="login-password"
               name="password"
               value={form.password}
-              onInput={handleChange}
+              onChange={handleChange}
               type="password"
               placeholder={copy.form.placeholders.password}
               className="c-field__control"

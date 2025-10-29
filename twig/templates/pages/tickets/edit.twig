@@ -4,7 +4,7 @@
 <section class="l-container py-2xl l-stack">
   {% include 'partials/page_header.twig' with { title: c.title } %}
   <nav class="c-breadcrumb" aria-label="Breadcrumb">
-    <a class="underline" href="/tickets">Tickets</a>
+    <a class="underline" href="{{ path_base|default('') }}/tickets">Tickets</a>
     <span class="c-breadcrumb__sep">/</span>
     <span>#{{ ticket.id }}</span>
   </nav>
@@ -36,7 +36,7 @@
     </div>
     <div class="c-modal__actions">
       <button class="c-button c-button--primary">{{ c.form.actions.update }}</button>
-      <a class="c-button c-button--secondary" href="/tickets">{{ c.form.actions.cancel }}</a>
+      <a class="c-button c-button--secondary" href="{{ path_base|default('') }}/tickets">{{ c.form.actions.cancel }}</a>
     </div>
   </section>
 </section>

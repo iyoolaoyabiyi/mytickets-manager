@@ -7,6 +7,22 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig   = new Environment($loader, ['cache' => false]);
 
+// Figure out the public path prefix where this script runs (supports subfolders)
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+$scriptDirRaw = $scriptName === '' ? '' : str_replace('\\', '/', dirname($scriptName));
+if ($scriptDirRaw === '.' || $scriptDirRaw === '/') {
+  $scriptDirRaw = '';
+}
+$scriptDir = $scriptDirRaw === '' ? '' : rtrim($scriptDirRaw, '/');
+
+$mountBaseRaw = $scriptDir === '' ? '' : str_replace('\\', '/', dirname($scriptDir));
+if ($mountBaseRaw === '.' || $mountBaseRaw === '/') {
+  $mountBaseRaw = '';
+}
+$pathBase = $mountBaseRaw === '' ? '' : rtrim($mountBaseRaw, '/');
+
+$assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/assets/';
+
 // helper to read copy json
 $copy = function(string $name) {
   $path = realpath(dirname(__DIR__) . "/packages/assets/copy/{$name}.json");
@@ -31,14 +47,27 @@ $isAuth = false;
 $stats  = ['total' => 0, 'open' => 0, 'inProgress' => 0, 'closed' => 0];
 $tickets = [];
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+if ($uri === '') {
+  $uri = '/';
+}
+if ($pathBase !== '' && strncmp($uri, $pathBase, strlen($pathBase)) === 0) {
+  $afterBase = substr($uri, strlen($pathBase));
+  if ($afterBase === '' || $afterBase[0] === '/') {
+    $uri = $afterBase === '' ? '/' : $afterBase;
+  }
+}
 $theme = 'light'; // or 'dark'
 
-$metaBase = function (string $title, string $description, string $path) {
+$metaBase = function (string $title, string $description, string $path) use ($pathBase) {
+  $canonicalPath = $path;
+  if ($pathBase !== '') {
+    $canonicalPath = rtrim($pathBase, '/') . $path;
+  }
   return [
     'title' => $title . ' · myTickets Manager',
     'description' => $description,
-    'canonical' => $path
+    'canonical' => $canonicalPath === '' ? '/' : $canonicalPath,
   ];
 };
 
@@ -52,6 +81,8 @@ switch ($uri) {
       'is_auth'     => $isAuth,
       'copyGlobal'  => $copyGlobal,
       'copyLanding' => $copyLanding,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
     break;
 
@@ -65,6 +96,8 @@ switch ($uri) {
       'is_auth'    => false,
       'copyGlobal' => $copyGlobal,
       'copyLogin'  => $copyLogin,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
     break;
 
@@ -77,6 +110,8 @@ switch ($uri) {
       'is_auth'    => false,
       'copyGlobal' => $copyGlobal,
       'copySignup' => $copySignup,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
     break;
 
@@ -91,6 +126,8 @@ switch ($uri) {
       'copyDashboard'=> $copyDashboard,
       'copyTickets'  => $copyTickets,
       'stats'        => $stats,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
     break;
 
@@ -104,6 +141,8 @@ switch ($uri) {
       'copyGlobal'  => $copyGlobal,
       'copyTickets' => $copyTickets,
       'tickets'     => $tickets,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
     break;
 
@@ -126,6 +165,8 @@ switch ($uri) {
         'copyGlobal'     => $copyGlobal,
         'copyTicketEdit' => $copyTicketEdit,
         'ticket'         => $ticket,
+        'asset_base_url' => $assetBaseUrl,
+        'path_base'      => $pathBase,
       ]);
       break;
     }
@@ -137,5 +178,7 @@ switch ($uri) {
       'page_id'    => 'not-found',
       'page_props' => [],
       'copyGlobal' => $copyGlobal,
+      'asset_base_url' => $assetBaseUrl,
+      'path_base'      => $pathBase,
     ]);
 }

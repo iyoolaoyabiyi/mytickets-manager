@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import landing from '@packages/assets/copy/landing.json'
-import wave from '@packages/assets/media/wave.svg'
-import circle from '@packages/assets/media/circle-1.svg'
 import { usePageMeta } from '../hooks/usePageMeta'
 
 export default function Landing() {
   const asset = (icon: string) =>
-    new URL(`@packages/assets/media/${icon}`, import.meta.url).toString()
+    new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
+  const heroWave = asset(landing.hero.media.wave)
+  const heroCirclePrimary = asset(landing.hero.media.decorativeCircle)
+  const heroCircleSecondary = heroCirclePrimary
   usePageMeta({ title: 'Home', description: landing.hero.subtitle })
   return (
     <>
@@ -19,8 +20,9 @@ export default function Landing() {
             <Link to="/auth/login" className="c-button c-button--secondary">{landing.hero.secondaryCta}</Link>
           </div>
         </div>
-        <img src={wave} className="c-hero__wave" alt="" />
-        <img src={circle} className="c-hero__decor" alt="" />
+        <img src={heroWave} className="c-hero__wave" alt="" aria-hidden="true" />
+        <img src={heroCirclePrimary} className="c-hero__decor" alt="" aria-hidden="true" />
+        <img src={heroCircleSecondary} className="c-hero__decor-secondary" alt="" aria-hidden="true" />
       </section>
 
       <section className="l-stack py-2xl">

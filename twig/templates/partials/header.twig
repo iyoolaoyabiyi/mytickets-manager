@@ -1,6 +1,6 @@
 <header class="c-header" data-component="header">
   <div class="c-header__inner">
-    <a href="/" class="c-header__brand">{{ copyGlobal.app.name }}</a>
+    <a href="{{ path_base|default('') }}/" class="c-header__brand">{{ copyGlobal.app.name }}</a>
     <div class="l-cluster">
       <button
         class="c-header__toggle"
@@ -22,12 +22,12 @@
     </div>
     <nav id="primary-nav" class="c-header__nav" aria-label="Primary" data-nav>
       {% if is_auth %}
-        <a href="/dashboard" class="c-header__link" data-nav-link>{{ copyGlobal.nav.dashboard }}</a>
-        <a href="/tickets" class="c-header__link" data-nav-link>{{ copyGlobal.nav.tickets }}</a>
+        <a href="{{ path_base|default('') }}/dashboard" class="c-header__link" data-nav-link>{{ copyGlobal.nav.dashboard }}</a>
+        <a href="{{ path_base|default('') }}/tickets" class="c-header__link" data-nav-link>{{ copyGlobal.nav.tickets }}</a>
         <button class="c-header__link" type="button" data-action="logout">{{ copyGlobal.nav.logout }}</button>
       {% else %}
-        <a href="/auth/login" class="c-header__link" data-nav-link>{{ copyGlobal.nav.login }}</a>
-        <a href="/auth/signup" class="c-header__link" data-nav-link>{{ copyGlobal.nav.signup }}</a>
+        <a href="{{ path_base|default('') }}/auth/login" class="c-header__link" data-nav-link>{{ copyGlobal.nav.login }}</a>
+        <a href="{{ path_base|default('') }}/auth/signup" class="c-header__link" data-nav-link>{{ copyGlobal.nav.signup }}</a>
       {% endif %}
       <button
         class="c-button c-button--secondary md:hidden"

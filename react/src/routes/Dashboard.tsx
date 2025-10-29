@@ -49,7 +49,7 @@ export default function Dashboard() {
   }, [loadStats])
 
   return (
-    <section className="l-container py-2xl l-stack">
+    <section className="py-2xl l-stack">
       <header className="c-page-header">
         <h1 className="c-page-header__title">{copy.title}</h1>
         <p className="c-page-header__subtitle">{copy.subtitle}</p>

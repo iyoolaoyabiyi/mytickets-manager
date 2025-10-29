@@ -57,30 +57,30 @@
   </header>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import copy from '@packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
-import { logout } from '@packages/utils/auth'
+import { getCurrentSession, logout, subscribeSession, type Session } from '@packages/utils/auth'
 import { pushToast } from '@packages/utils/toast'
 
-const route = useRoute()
 const router = useRouter()
 const isMenuOpen = ref(false)
 const theme = ref<Theme>(getStoredTheme())
-
-const isAuthRoute = computed(() => route.path.startsWith('/auth'))
+const session = ref<Session | null>(getCurrentSession())
+const isAuthenticated = computed(() => !!session.value)
+let unsubscribeSession: (() => void) | null = null
 const links = computed(() => {
-  if (isAuthRoute.value) {
+  if (isAuthenticated.value) {
     return [
-      { to: '/auth/login', label: copy.nav.login },
-      { to: '/auth/signup', label: copy.nav.signup }
+      { to: '/dashboard', label: copy.nav.dashboard },
+      { to: '/tickets', label: copy.nav.tickets },
+      { to: '/auth/login', label: copy.nav.logout, action: 'logout' as const }
     ]
   }
   return [
-    { to: '/dashboard', label: copy.nav.dashboard },
-    { to: '/tickets', label: copy.nav.tickets },
-    { to: '/auth/login', label: copy.nav.logout, action: 'logout' as const }
+    { to: '/auth/signup', label: copy.nav.signup },
+    { to: '/auth/login', label: copy.nav.login }
   ]
 })
 
@@ -107,6 +107,7 @@ const handleNavigate = () => {
 
 const handleLogout = async () => {
   logout()
+  session.value = null
   isMenuOpen.value = false
   pushToast(copy.toasts.authEnd ?? 'Session ended, please login again to continue.', 'info')
   await router.push('/auth/login')
@@ -114,5 +115,13 @@ const handleLogout = async () => {
 
 onMounted(() => {
   persistTheme(theme.value)
+  unsubscribeSession = subscribeSession((next) => {
+    session.value = next
+  })
+})
+
+onBeforeUnmount(() => {
+  unsubscribeSession?.()
+  unsubscribeSession = null
 })
 </script>
