@@ -32,6 +32,22 @@ if [ -f "$ROOT_DIR/deploy/cpanel/index.php" ]; then
   cp -v "$ROOT_DIR/deploy/cpanel/index.php" "$OUT_DIR/index.php"
 fi
 
+# If REWRITE_BASE is set (or provided as first arg), patch the .htaccess in the bundle to include RewriteBase
+REWRITE_BASE="${1:-${REWRITE_BASE:-}}"
+if [ -n "$REWRITE_BASE" ]; then
+  echo "Applying RewriteBase: $REWRITE_BASE to .htaccess"
+  HT="${OUT_DIR}/.htaccess"
+  if [ -f "$HT" ]; then
+    # Insert RewriteBase after RewriteEngine On if not already present
+    if ! grep -q "RewriteBase" "$HT"; then
+      awk -v rb="$REWRITE_BASE" 'BEGIN{ins=0} /RewriteEngine On/{print; print "    RewriteBase " rb; ins=1; next} {print}' "$HT" > "$HT.tmp" && mv "$HT.tmp" "$HT"
+    else
+      # replace existing RewriteBase
+      sed -i "s#RewriteBase .*#RewriteBase $REWRITE_BASE#" "$HT"
+    fi
+  fi
+fi
+
 echo "Creating zip: $ZIP_OUT"
 cd "$ROOT_DIR/dist/cpanel"
 zip -r "$ZIP_OUT" mytickets-manager > /dev/null

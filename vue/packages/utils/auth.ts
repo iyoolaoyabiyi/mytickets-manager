@@ -27,6 +27,31 @@ export type SignupPayload = {
   password: string
 }
 
+const isSessionUser = (value: unknown): value is Session['user'] => {
+  if (!value || typeof value !== 'object' || value === null) return false
+  const candidate = value as Record<string, unknown>
+  return (
+    typeof candidate.id === 'number' &&
+    Number.isFinite(candidate.id) &&
+    typeof candidate.name === 'string' &&
+    candidate.name.length > 0 &&
+    typeof candidate.email === 'string' &&
+    candidate.email.length > 0
+  )
+}
+
+const isValidSession = (value: unknown): value is Session => {
+  if (!value || typeof value !== 'object' || value === null) return false
+  const candidate = value as Record<string, unknown>
+  return (
+    typeof candidate.token === 'string' &&
+    candidate.token.length > 0 &&
+    typeof candidate.expiresAt === 'number' &&
+    Number.isFinite(candidate.expiresAt) &&
+    isSessionUser(candidate.user)
+  )
+}
+
 const USERS_KEY = 'ticketapp_users'
 const SESSION_KEY = 'ticketapp_session'
 const SESSION_EVENT = 'ticketapp:session'
@@ -120,9 +145,13 @@ const readSession = (): Session | null => {
   try {
     const raw = window.localStorage.getItem(SESSION_KEY)
     if (!raw) return null
-    const session = JSON.parse(raw) as Session
-    memorySession = session
-    return session
+    const parsed = JSON.parse(raw) as unknown
+    if (!isValidSession(parsed)) {
+      writeSession(null)
+      return null
+    }
+    memorySession = parsed
+    return parsed
   } catch {
     return null
   }

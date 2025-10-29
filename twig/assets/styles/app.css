@@ -108,7 +108,12 @@
 html, body { height: 100%; }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { @apply font-sans text-fg bg-bg min-h-screen flex flex-col; -webkit-font-smoothing: antialiased; background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%); }
+body {
+  @apply font-sans text-fg bg-bg flex flex-col min-h-screen;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%);
+}
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -160,6 +165,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-alert { @apply c-card border border-accent bg-accent/10 text-accent; }
 
 @utility c-card--error { @apply border border-red-200 bg-red-50 text-red-700; }
+
+@utility c-skiplink {
+  position: fixed;
+  left: 50%;
+  top: var(--spacing-lg);
+  transform: translate(-50%, -150%);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  background-color: var(--color-accent);
+  color: #fff;
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-1);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: transform var(--default-transition-duration) var(--default-transition-timing-function),
+    opacity var(--default-transition-duration) var(--default-transition-timing-function);
+  z-index: 100;
+}
+.c-skiplink:focus-visible {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
 
 @utility c-footer { @apply bg-surface-2 border-t border-border mt-2xl; }
 @utility c-footer__inner { @apply l-container py-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-sm text-fg-muted; }
