@@ -3,11 +3,29 @@ import landing from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { useSession } from '../hooks/useSession'
 
+const mediaAssets = import.meta.glob('../../packages/assets/media/**/*', {
+  eager: true,
+  as: 'url',
+}) as Record<string, string>
+
+const asset = (icon?: string | null) => {
+  if (!icon) return undefined
+  const key = `../../packages/assets/media/${icon}`
+  if (!mediaAssets[key]) {
+    console.warn(`Missing asset for key: ${key}`)
+    return undefined
+  }
+  return mediaAssets[key]
+}
+
 export default function Landing() {
-  const asset = (icon: string) =>
-    new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
   const heroWave = asset(landing.hero.media.wave)
-  const [ticketIcon, funnelIcon, checkCircleIcon] = landing.features.map(f => asset(f.icon))
+  const features = landing.features.map(feature => {
+    return {
+      ...feature,
+      icon: asset(feature.icon),
+    }
+  })
   const heroCirclePrimary = asset(landing.hero.media.decorativeCircle)
   const heroCircleSecondary = asset(
     landing.hero.media.decorativeCircleSecondary ?? landing.hero.media.decorativeCircle
@@ -43,9 +61,9 @@ export default function Landing() {
 
       <section className="l-stack py-2xl">
         <div className="l-grid-3">
-          {landing.features.map((f, i) => (
+          {features.map((f, i) => (
             <article className="c-feature-card animate-fade-up" key={i}>
-              <img src={asset(f.icon)} className="c-feature-card__icon" alt="" />
+              <img src={f.icon} className="c-feature-card__icon" alt="" />
               <h3 className="c-feature-card__title">{f.title}</h3>
               <p className="c-feature-card__body">{f.body}</p>
             </article>

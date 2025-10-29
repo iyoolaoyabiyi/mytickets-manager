@@ -5,12 +5,30 @@ import copy from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../composables/usePageMeta'
 import { useSession } from '../composables/useSession'
 
-const asset = (icon: string) =>
-  new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
+const mediaAssets = import.meta.glob('../../packages/assets/media/**/*', {
+  eager: true,
+  as: 'url'
+}) as Record<string, string>
+
+const asset = (icon?: string | null) => {
+  if (!icon) return undefined
+  const key = `../../packages/assets/media/${icon}`
+  if (!mediaAssets[key]) {
+    console.warn(`Missing asset for key: ${key}`)
+    return undefined
+  }
+  return mediaAssets[key]
+}
 
 const heroWave = asset(copy.hero.media.wave)
 const heroCirclePrimary = asset(copy.hero.media.decorativeCircle)
 const heroCircleSecondary = asset(copy.hero.media.decorativeCircleSecondary ?? copy.hero.media.decorativeCircle)
+const features = computed(() =>
+  copy.features.map(feature => ({
+    ...feature,
+    icon: asset(feature.icon)
+  }))
+)
 const session = useSession()
 
 usePageMeta({
@@ -48,8 +66,8 @@ const authenticatedHref = computed(() => copy.hero.authenticatedHref ?? '/dashbo
 
   <section class="l-stack py-2xl">
     <div class="l-grid-3">
-      <article v-for="(f, i) in copy.features" :key="i" class="c-feature-card animate-fade-up">
-        <img :src="asset(f.icon)" class="c-feature-card__icon" alt="" />
+      <article v-for="(f, i) in features" :key="i" class="c-feature-card animate-fade-up">
+        <img :src="f.icon" class="c-feature-card__icon" alt="" />
         <h3 class="c-feature-card__title">{{ f.title }}</h3>
         <p class="c-feature-card__body">{{ f.body }}</p>
       </article>
