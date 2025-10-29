@@ -33,7 +33,7 @@
     <a class="c-button c-button--primary" href="{{ path_base|default('') }}/tickets">{{ c.actions.toTickets }}</a>
   </div>
   <section class="c-empty animate-fade-up" data-dashboard-empty hidden>
-    <img class="c-empty__illustration" src="{{ asset_base_url|default('/assets/') ~ 'media/icons/bar-chart.svg' }}" alt="" />
+    <img class="c-empty__illustration" src="{{ asset_base_url|default('/packages/assets/') ~ 'media/icons/bar-chart.svg' }}" alt="" />
     <p class="c-empty__title">{{ copyTickets.empty.primary.title }}</p>
     <a class="c-button c-button--primary" href="{{ path_base|default('') }}/tickets">{{ copyTickets.empty.primary.action }}</a>
   </section>

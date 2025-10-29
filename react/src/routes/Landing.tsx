@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom'
 import landing from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../hooks/usePageMeta'
+import { useSession } from '../hooks/useSession'
 
 export default function Landing() {
   const asset = (icon: string) =>
     new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
   const heroWave = asset(landing.hero.media.wave)
   const heroCirclePrimary = asset(landing.hero.media.decorativeCircle)
-  const heroCircleSecondary = heroCirclePrimary
+  const heroCircleSecondary = asset(
+    landing.hero.media.decorativeCircleSecondary ?? landing.hero.media.decorativeCircle
+  )
+  const session = useSession()
+  const isAuthenticated = Boolean(session)
+  const authenticatedCtaLabel = landing.hero.authenticatedCta ?? 'Dashboard'
+  const authenticatedHref = landing.hero.authenticatedHref ?? '/dashboard'
   usePageMeta({ title: 'Home', description: landing.hero.subtitle })
   return (
     <>
@@ -16,8 +23,16 @@ export default function Landing() {
           <h1 className="c-hero__title">{landing.hero.title}</h1>
           <p className="c-hero__subtitle">{landing.hero.subtitle}</p>
           <div className="c-hero__actions">
-            <Link to="/auth/signup" className="c-button c-button--primary">{landing.hero.primaryCta}</Link>
-            <Link to="/auth/login" className="c-button c-button--secondary">{landing.hero.secondaryCta}</Link>
+            {isAuthenticated ? (
+              <Link to={authenticatedHref} className="c-button c-button--primary">
+                {authenticatedCtaLabel}
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth/signup" className="c-button c-button--primary">{landing.hero.primaryCta}</Link>
+                <Link to="/auth/login" className="c-button c-button--secondary">{landing.hero.secondaryCta}</Link>
+              </>
+            )}
           </div>
         </div>
         <img src={heroWave} className="c-hero__wave" alt="" aria-hidden="true" />

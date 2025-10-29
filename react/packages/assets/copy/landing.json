@@ -7,8 +7,11 @@
     "secondaryCta": "Login",
     "media": {
       "wave": "wave.svg",
-      "decorativeCircle": "circle-1.svg"
-    }
+      "decorativeCircle": "circle-1.svg",
+      "decorativeCircleSecondary": "circle-2.svg"
+    },
+    "authenticatedCta": "Dashboard",
+    "authenticatedHref": "/dashboard"
   },
   "features": [
     {

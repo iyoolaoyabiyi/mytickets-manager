@@ -15,7 +15,7 @@ $requestUri = str_replace('\\', '/', $_SERVER['REQUEST_URI'] ?? '/');
 if (strpos($scriptName, '/mytickets-manager/') === 0 || strpos($requestUri, '/mytickets-manager/') === 0) {
     $pathBase = '/mytickets-manager';
     $scriptDir = '/mytickets-manager';
-    $assetBaseUrl = '/mytickets-manager/assets/';
+    $assetBaseUrl = '/mytickets-manager/packages/assets/';
 } else {
     // Fallback to computed paths (for different deployment layouts)
     $scriptDirRaw = $scriptName === '' ? '' : str_replace('\\', '/', dirname($scriptName));
@@ -24,10 +24,11 @@ if (strpos($scriptName, '/mytickets-manager/') === 0 || strpos($requestUri, '/my
     }
     $scriptDir = $scriptDirRaw === '' ? '' : rtrim($scriptDirRaw, '/');
     $pathBase = $scriptDir; // For this layout, pathBase is the same as scriptDir
-    $assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/assets/';
+    $assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/packages/assets/';
 }
 
-$assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/assets/';
+$assetBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/packages/assets/';
+$stylesBaseUrl = ($scriptDir === '' ? '' : $scriptDir) . '/packages/styles/';
 
 // helper to read copy json
 $copy = function(string $name) {
@@ -35,7 +36,7 @@ $copy = function(string $name) {
   $candidates = [
     dirname(__DIR__) . "/packages/assets/copy/{$name}.json",
     __DIR__ . "/../packages/assets/copy/{$name}.json",
-    __DIR__ . "/assets/copy/{$name}.json",
+    __DIR__ . "/packages/assets/copy/{$name}.json",
   ];
 
   foreach ($candidates as $candidate) {
@@ -107,6 +108,7 @@ switch ($uri) {
       'copyGlobal'  => $copyGlobal,
       'copyLanding' => $copyLanding,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
     break;
@@ -122,6 +124,7 @@ switch ($uri) {
       'copyGlobal' => $copyGlobal,
       'copyLogin'  => $copyLogin,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
     break;
@@ -136,6 +139,7 @@ switch ($uri) {
       'copyGlobal' => $copyGlobal,
       'copySignup' => $copySignup,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
     break;
@@ -152,6 +156,7 @@ switch ($uri) {
       'copyTickets'  => $copyTickets,
       'stats'        => $stats,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
     break;
@@ -167,6 +172,7 @@ switch ($uri) {
       'copyTickets' => $copyTickets,
       'tickets'     => $tickets,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
     break;
@@ -191,6 +197,7 @@ switch ($uri) {
         'copyTicketEdit' => $copyTicketEdit,
         'ticket'         => $ticket,
         'asset_base_url' => $assetBaseUrl,
+        'styles_base_url' => $stylesBaseUrl,
         'path_base'      => $pathBase,
       ]);
       break;
@@ -211,6 +218,7 @@ switch ($uri) {
       'page_props' => [],
       'copyGlobal' => $copyGlobal,
       'asset_base_url' => $assetBaseUrl,
+      'styles_base_url' => $stylesBaseUrl,
       'path_base'      => $pathBase,
     ]);
 }

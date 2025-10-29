@@ -1,19 +1,26 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import copy from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../composables/usePageMeta'
+import { useSession } from '../composables/useSession'
 
 const asset = (icon: string) =>
   new URL(`../../packages/assets/media/${icon}`, import.meta.url).toString()
 
 const heroWave = asset(copy.hero.media.wave)
 const heroCirclePrimary = asset(copy.hero.media.decorativeCircle)
-const heroCircleSecondary = heroCirclePrimary
+const heroCircleSecondary = asset(copy.hero.media.decorativeCircleSecondary ?? copy.hero.media.decorativeCircle)
+const session = useSession()
 
 usePageMeta({
   title: 'Home',
   description: copy.hero.subtitle
 })
+
+const isAuthenticated = computed(() => !!session.value)
+const authenticatedLabel = computed(() => copy.hero.authenticatedCta ?? 'Dashboard')
+const authenticatedHref = computed(() => copy.hero.authenticatedHref ?? '/dashboard')
 </script>
 <template>
   <section class="c-hero">
@@ -21,8 +28,17 @@ usePageMeta({
       <h1 class="c-hero__title">{{ copy.hero.title }}</h1>
       <p class="c-hero__subtitle">{{ copy.hero.subtitle }}</p>
       <div class="c-hero__actions">
-        <RouterLink to="/auth/signup" class="c-button c-button--primary">{{ copy.hero.primaryCta }}</RouterLink>
-        <RouterLink to="/auth/login" class="c-button c-button--secondary">{{ copy.hero.secondaryCta }}</RouterLink>
+        <RouterLink
+          v-if="isAuthenticated"
+          :to="authenticatedHref"
+          class="c-button c-button--primary"
+        >
+          {{ authenticatedLabel }}
+        </RouterLink>
+        <template v-else>
+          <RouterLink to="/auth/signup" class="c-button c-button--primary">{{ copy.hero.primaryCta }}</RouterLink>
+          <RouterLink to="/auth/login" class="c-button c-button--secondary">{{ copy.hero.secondaryCta }}</RouterLink>
+        </template>
       </div>
     </div>
     <img :src="heroWave" class="c-hero__wave" alt="" aria-hidden="true" />

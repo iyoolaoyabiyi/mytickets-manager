@@ -9,8 +9,10 @@
         aria-expanded="false"
         aria-label="{{ copyGlobal.nav.toggle.open }}"
         data-action="toggle-nav"
+        data-state="closed"
       >
         <span class="sr-only">{{ copyGlobal.nav.toggle.open }}</span>
+        <span class="c-header__toggle-icon" aria-hidden="true"></span>
       </button>
       <button
         class="c-button c-button--secondary hidden md:inline-flex"
@@ -20,15 +22,23 @@
         {{ copyGlobal.theme.toggle|replace({'{app.theme}': 'Dark'}) }}
       </button>
     </div>
-    <nav id="primary-nav" class="c-header__nav" aria-label="Primary" data-nav>
-      {% if is_auth %}
+    <nav
+      id="primary-nav"
+      class="c-header__nav"
+      aria-label="Primary"
+      data-nav
+      data-state="closed"
+      data-auth-state="{{ is_auth ? 'auth' : 'guest' }}"
+    >
+      <div data-auth-group="auth" {% if not is_auth %}hidden{% endif %}>
         <a href="{{ path_base|default('') }}/dashboard" class="c-header__link" data-nav-link>{{ copyGlobal.nav.dashboard }}</a>
         <a href="{{ path_base|default('') }}/tickets" class="c-header__link" data-nav-link>{{ copyGlobal.nav.tickets }}</a>
         <button class="c-header__link" type="button" data-action="logout">{{ copyGlobal.nav.logout }}</button>
-      {% else %}
+      </div>
+      <div data-auth-group="guest" {% if is_auth %}hidden{% endif %}>
         <a href="{{ path_base|default('') }}/auth/login" class="c-header__link" data-nav-link>{{ copyGlobal.nav.login }}</a>
         <a href="{{ path_base|default('') }}/auth/signup" class="c-header__link" data-nav-link>{{ copyGlobal.nav.signup }}</a>
-      {% endif %}
+      </div>
       <button
         class="c-button c-button--secondary md:hidden"
         type="button"

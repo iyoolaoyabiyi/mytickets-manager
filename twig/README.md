@@ -4,7 +4,7 @@ The Twig package delivers a server-rendered myTickets experience aligned with [d
 
 ## Framework Highlights
 - **Templates mirror journeys**: `templates/pages/` and `templates/partials/` match the navigation plan in [docs/foundation-pack/01-screens-and-routes.md](../docs/foundation-pack/01-screens-and-routes.md) and the component inventory in [docs/foundation-pack/05.0-components-and-states-mapping.md](../docs/foundation-pack/05.0-components-and-states-mapping.md).
-- **Stylesheet-first Tailwind**: `assets/styles/app.css` relies on `@apply` and the tokens defined in [docs/foundation-pack/04-design-system.md](../docs/foundation-pack/04-design-system.md), including the media guidance in [docs/foundation-pack/03-media.md](../docs/foundation-pack/03-media.md).
+- **Stylesheet-first Tailwind**: `packages/styles/app.css` relies on `@apply` and the tokens defined in [docs/foundation-pack/04-design-system.md](../docs/foundation-pack/04-design-system.md), including the media guidance in [docs/foundation-pack/03-media.md](../docs/foundation-pack/03-media.md).
 - **Shared assets**: Copy, icons, and media flow from `@packages/assets`, preserving the tone in [docs/copy.md](../docs/copy.md) and [docs/foundation-pack/02.1-copy-deck.md](../docs/foundation-pack/02.1-copy-deck.md).
 
 ## Intent and Scope
@@ -14,7 +14,7 @@ This package powers SSR deployments where PHP/Twig renders the initial HTML shel
 - `templates/base.twig` wires the page skeleton (skip link, header, footer, toast placeholder) specified in [docs/foundation-pack/file-structure.md](../docs/foundation-pack/file-structure.md).
 - `templates/pages/` contains route-specific templates for Landing, Auth, Dashboard, and Tickets.
 - `templates/partials/` stores reusable UI fragments aligned with the component/state matrix.
-- `assets/styles/app.css` applies Tailwind tokens and theme rules shared across frameworks.
+- `packages/styles/app.css` applies Tailwind tokens and theme rules shared across frameworks.
 - `index.php` and `router.php` hydrate Twig with data shaped after [docs/foundation-pack/05.2-data-models.md](../docs/foundation-pack/05.2-data-models.md).
 
 ## Data and Rendering Flow
@@ -35,5 +35,5 @@ This package powers SSR deployments where PHP/Twig renders the initial HTML shel
 
 ## Usage
 1. Provide the render variables listed above when invoking Twig.
-2. Serve `/assets` statically and include `/assets/styles/app.css` in the base layout.
+2. Serve `/packages` statically and include `/packages/styles/app.css` in the base layout.
 3. Mount controller routes via `router.php` or your framework of choice, ensuring data shapes conform to the shared models.

@@ -6,9 +6,9 @@
 		"tailwindcss": "^4.1.16"
 	},
 	"scripts": {
-		"compile-css": "../scripts/with-node.sh ./node_modules/.bin/tailwindcss -i ./assets/styles/app.css -o ./assets/styles/style.css --watch",
-		"build:css": "../scripts/with-node.sh ./node_modules/.bin/tailwindcss -i ./assets/styles/app.css -o ./assets/styles/style.css",
-		"build:js": "../scripts/with-node.sh node_modules/.bin/esbuild assets/scripts/app.ts --bundle --format=esm --platform=browser --target=es2020 --outfile=assets/scripts/app.js",
+		"compile-css": "../scripts/with-node.sh ./node_modules/.bin/tailwindcss -i ./packages/styles/app.css -o ./packages/styles/style.css --watch",
+		"build:css": "../scripts/with-node.sh ./node_modules/.bin/tailwindcss -i ./packages/styles/app.css -o ./packages/styles/style.css",
+		"build:js": "../scripts/with-node.sh node_modules/.bin/esbuild packages/assets/scripts/app.ts --bundle --format=esm --platform=browser --target=es2020 --outfile=packages/assets/scripts/app.js",
 		"build": "npm run build:css && npm run build:js",
 		"dev": "npm-run-all --parallel compile-css build:js -- --watch"
 	},

@@ -8,9 +8,9 @@
     {% if meta.canonical is defined %}
       <link rel="canonical" href="{{ meta.canonical }}">
     {% endif %}
-  <link rel="icon" type="image/svg+xml" href="{{ asset_base_url|default('/assets/') ~ 'media/icons/ticket.svg' }}" />
+  <link rel="icon" type="image/svg+xml" href="{{ asset_base_url|default('/packages/assets/') ~ 'media/icons/ticket.svg' }}" />
     <title>{{ meta.title|default('myTickets Manager') }}</title>
-  <link rel="stylesheet" href="{{ asset_base_url|default('/assets/') ~ 'styles/style.css' }}">
+  <link rel="stylesheet" href="{{ styles_base_url|default('/packages/styles/') ~ 'style.css' }}">
     {% block head_extra %}{% endblock %}
   </head>
   <body data-page="{{ page_id|default('') }}">
@@ -34,6 +34,6 @@
         }
       }|json_encode|raw }}
     </script>
-  <script type="module" src="{{ asset_base_url|default('/assets/') ~ 'scripts/app.js' }}"></script>
+  <script type="module" src="{{ asset_base_url|default('/packages/assets/') ~ 'scripts/app.js' }}"></script>
   </body>
 </html>

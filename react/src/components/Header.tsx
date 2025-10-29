@@ -2,26 +2,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useMemo, useState } from 'react'
 import globalCopy from '@packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
-import { getCurrentSession, logout, subscribeSession, type Session } from '@packages/utils/auth'
+import { logout } from '@packages/utils/auth'
 import { pushToast } from '@packages/utils/toast'
+import { useSession } from '../hooks/useSession'
 
 export default function Header() {
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [theme, setTheme] = useState<Theme>(getStoredTheme())
-  const [session, setSession] = useState<Session | null>(getCurrentSession())
+  const session = useSession()
   const isAuthenticated = Boolean(session)
 
   useEffect(() => {
     persistTheme(theme)
   }, [theme])
-
-  useEffect(() => {
-    const unsubscribe = subscribeSession((next) => setSession(next))
-    return () => {
-      unsubscribe?.()
-    }
-  }, [])
 
   const links = useMemo(() => {
     if (isAuthenticated) {
@@ -51,7 +45,6 @@ export default function Header() {
 
   const handleLogout = () => {
     logout()
-    setSession(null)
     setIsMenuOpen(false)
     pushToast(globalCopy.toasts.authEnd, 'info')
     navigate('/auth/login', { replace: true })
@@ -69,8 +62,10 @@ export default function Header() {
             aria-expanded={isMenuOpen}
             aria-label={menuLabel}
             onClick={() => setIsMenuOpen((open) => !open)}
+            data-state={isMenuOpen ? 'open' : 'closed'}
           >
             <span className="sr-only">{menuLabel}</span>
+            <span className="c-header__toggle-icon" aria-hidden="true" />
           </button>
           <button
             className="c-button c-button--secondary hidden md:inline-flex"

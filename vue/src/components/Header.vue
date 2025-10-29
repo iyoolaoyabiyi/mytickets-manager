@@ -10,8 +10,10 @@
           :aria-expanded="isMenuOpen"
           :aria-label="menuLabel"
           @click="toggleMenu"
+          :data-state="isMenuOpen ? 'open' : 'closed'"
         >
           <span class="sr-only">{{ menuLabel }}</span>
+          <span class="c-header__toggle-icon" aria-hidden="true"></span>
         </button>
         <button
           class="c-button c-button--secondary hidden md:inline-flex"
@@ -57,19 +59,19 @@
   </header>
 </template>
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import copy from '@packages/assets/copy/global.json'
 import { getStoredTheme, persistTheme, toggleTheme, type Theme } from '@packages/utils/theme'
-import { getCurrentSession, logout, subscribeSession, type Session } from '@packages/utils/auth'
+import { logout } from '@packages/utils/auth'
 import { pushToast } from '@packages/utils/toast'
+import { useSession } from '../composables/useSession'
 
 const router = useRouter()
 const isMenuOpen = ref(false)
 const theme = ref<Theme>(getStoredTheme())
-const session = ref<Session | null>(getCurrentSession())
+const session = useSession()
 const isAuthenticated = computed(() => !!session.value)
-let unsubscribeSession: (() => void) | null = null
 const links = computed(() => {
   if (isAuthenticated.value) {
     return [
@@ -107,7 +109,6 @@ const handleNavigate = () => {
 
 const handleLogout = async () => {
   logout()
-  session.value = null
   isMenuOpen.value = false
   pushToast(copy.toasts.authEnd ?? 'Session ended, please login again to continue.', 'info')
   await router.push('/auth/login')
@@ -115,13 +116,5 @@ const handleLogout = async () => {
 
 onMounted(() => {
   persistTheme(theme.value)
-  unsubscribeSession = subscribeSession((next) => {
-    session.value = next
-  })
-})
-
-onBeforeUnmount(() => {
-  unsubscribeSession?.()
-  unsubscribeSession = null
 })
 </script>
