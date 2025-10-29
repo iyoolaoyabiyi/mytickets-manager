@@ -37,6 +37,56 @@ const copyGlobal = appConfig.copyGlobal || {}
 const pageConfig = appConfig.page || { id: document.body.dataset.page, props: {} }
 const pageId: string = pageConfig.id || document.body.dataset.page || ''
 const pageProps: Record<string, unknown> = pageConfig.props || {}
+const normalizeBasePath = (value: unknown): string => {
+  if (typeof value !== 'string') return ''
+  if (!value) return ''
+  return value.endsWith('/') ? value.slice(0, -1) : value
+}
+const pathBase = normalizeBasePath(appConfig.pathBase ?? '')
+const buildPath = (input: string): string => {
+  if (!input) {
+    return pathBase || '/'
+  }
+  if (/^[a-z]+:\/\//i.test(input)) {
+    return input
+  }
+
+  let pathPart = input
+  let queryPart = ''
+  let hashPart = ''
+
+  const hashIndex = pathPart.indexOf('#')
+  if (hashIndex >= 0) {
+    hashPart = pathPart.slice(hashIndex)
+    pathPart = pathPart.slice(0, hashIndex)
+  }
+
+  const queryIndex = pathPart.indexOf('?')
+  if (queryIndex >= 0) {
+    queryPart = pathPart.slice(queryIndex)
+    pathPart = pathPart.slice(0, queryIndex)
+  }
+
+  let normalizedPath = pathPart
+
+  if (!normalizedPath) {
+    normalizedPath = '/'
+  } else if (!normalizedPath.startsWith('/')) {
+    normalizedPath = `/${normalizedPath}`
+  }
+
+  if (pathBase) {
+    if (
+      normalizedPath === pathBase ||
+      normalizedPath.startsWith(`${pathBase}/`)
+    ) {
+      return `${normalizedPath}${queryPart}${hashPart}`
+    }
+    normalizedPath = `${pathBase}${normalizedPath}`
+  }
+
+  return `${normalizedPath}${queryPart}${hashPart}`
+}
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -95,7 +145,7 @@ const initHeader = () => {
       event.preventDefault()
       logout()
       pushToast(copyGlobal.toasts?.authEnd || 'Session ended, please login again to continue.', 'info')
-      window.location.href = '/auth/login'
+      window.location.href = buildPath('/auth/login')
     })
   })
 }
@@ -241,7 +291,7 @@ const initLoginForm = () => {
       const session = await login({ email: email.toLowerCase(), password })
       const message = (copyGlobal.toasts?.authSuccess || 'Welcome back {name}.').replace('{name}', session.user.name || 'there')
       pushToast(message, 'success')
-      const target = redirect || '/dashboard'
+      const target = redirect ? buildPath(redirect) : buildPath('/dashboard')
       window.location.href = target
     } catch (error) {
       const message = error instanceof Error ? error.message : (copyGlobal.toasts?.authError || 'Invalid email or password.')
@@ -324,7 +374,7 @@ const initSignupForm = () => {
     try {
       await signup({ name, email: email.toLowerCase(), password })
       pushToast(copyGlobal.toasts?.postSignup || 'Account created. Please login.', 'success')
-      window.location.href = '/auth/login'
+      window.location.href = buildPath('/auth/login')
     } catch (error) {
       const message = error instanceof Error ? error.message : (copyGlobal.toasts?.validation || 'Please fix the errors and try again.')
       setFieldError(formError, message)
@@ -344,13 +394,14 @@ const guardRoutes = () => {
       const message = peekSession() ? (copyGlobal.toasts?.sessionExpired || 'Your session has expired, please log in again.') : (copyGlobal.toasts?.sessionInvalid || 'Invalid session, please login to access resource.')
       pushToast(message, 'error')
       const redirect = encodeURIComponent(window.location.pathname + window.location.search)
-      window.location.replace(`/auth/login?redirect=${redirect}`)
+      const loginUrl = buildPath('/auth/login')
+      window.location.replace(`${loginUrl}?redirect=${redirect}`)
       return false
     }
   }
 
   if (authPages.includes(pageId) && requireAuth()) {
-    window.location.replace('/dashboard')
+    window.location.replace(buildPath('/dashboard'))
     return false
   }
 

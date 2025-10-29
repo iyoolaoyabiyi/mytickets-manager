@@ -26,6 +26,7 @@
     {% block page_scripts %}{% endblock %}
     <script id="ticket-app-config" type="application/json">
       {{ {
+        'pathBase': path_base|default(''),
         'copyGlobal': copyGlobal,
         'page': {
           'id': page_id|default(''),
