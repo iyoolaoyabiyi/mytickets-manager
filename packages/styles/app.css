@@ -173,7 +173,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-hero__wave { @apply absolute bottom-0 left-0 w-full; }
 @utility c-hero__decor { @apply absolute -top-10 right-[10%] w-40 opacity-80; }
 
-@utility c-card { @apply bg-surface text-fg border border-border rounded-lg p-lg shadow-1 transition-shadow transition-transform duration-300; }
+@utility c-card { @apply bg-surface text-fg border border-border rounded-lg p-lg shadow-1 transition-shadow duration-300; }
 .c-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
 @utility c-feature-card { @apply c-card text-center py-xl; }
 @utility c-feature-card__icon { @apply mx-auto mb-sm w-14 h-14 object-contain drop-shadow-sm; }
@@ -201,7 +201,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-field__control { @apply bg-surface text-fg border border-border rounded-md px-md py-sm; }
 @utility c-field__message { @apply text-sm text-red-600; }
 
-@utility c-button { @apply inline-flex items-center justify-center rounded-md font-medium transition-transform transition-opacity duration-200; }
+@utility c-button { @apply inline-flex items-center justify-center rounded-md font-medium transition-transform duration-200; }
 .c-button:hover { transform: translateY(-1px); }
 @utility c-button--primary { @apply bg-accent text-white px-md py-sm hover:opacity-95; }
 @utility c-button--secondary { @apply bg-surface-2 text-fg border border-border px-md py-sm hover:opacity-95; }
@@ -229,18 +229,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-modal__text { @apply text-fg-muted mt-sm; }
 @utility c-modal__actions { @apply l-cluster justify-end mt-lg; }
 
-@utility c-modal { @apply fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center px-lg py-xl; }
+@utility c-modal { @apply fixed inset-0 z-100 bg-black/60 backdrop-blur-sm flex items-center justify-center px-lg py-xl; }
 @utility c-modal__panel { @apply c-card w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-up; }
 
 @utility c-empty { @apply c-card text-center py-xl; }
 @utility c-empty__illustration { @apply mx-auto mb-sm; }
 @utility c-empty__title { @apply text-lg font-semibold; }
 
-@utility c-toast-stack { @apply fixed bottom-6 right-6 flex flex-col gap-sm w-[min(360px,90vw)] pointer-events-none z-[110]; }
+@utility c-toast-stack { @apply fixed bottom-6 right-6 flex flex-col gap-sm w-[min(360px,90vw)] pointer-events-none z-110; }
 @utility c-toast { @apply bg-surface text-fg border border-border rounded-md px-md py-sm shadow-2 flex items-start gap-sm pointer-events-auto; animation: toast-in .25s ease forwards; }
-@utility c-toast[data-level="success"] { @apply border-green-300 bg-green-50 text-green-800; }
-@utility c-toast[data-level="error"] { @apply border-red-300 bg-red-50 text-red-700; }
-@utility c-toast[data-level="info"] { @apply border-sky-300 bg-sky-50 text-sky-800; }
+.c-toast[data-level="success"] { @apply border-green-300 bg-green-50 text-green-800; }
+.c-toast[data-level="error"] { @apply border-red-300 bg-red-50 text-red-700; }
+.c-toast[data-level="info"] { @apply border-sky-300 bg-sky-50 text-sky-800; }
 @utility c-toast__message { @apply text-sm leading-relaxed; }
 @utility c-toast__close { @apply border-none bg-transparent text-inherit cursor-pointer; }
 .c-toast[data-leaving="true"] { animation: toast-out .2s ease forwards; }

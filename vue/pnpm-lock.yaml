@@ -18,6 +18,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.16
         version: 4.1.16(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2))
+      '@types/vue':
+        specifier: ^2.0.0
+        version: 2.0.0(typescript@5.9.3)
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
         version: 6.0.1(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2))(vue@3.5.22(typescript@5.9.3))
@@ -427,6 +430,10 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/vue@2.0.0':
+    resolution: {integrity: sha512-WDElkBv/o4lVwu6wYHB06AXs4Xo2fwDjJUpvPRc1QQdzkUSiGFjrYuSCy8raxLE5FObgKq8ND7R5gSZTFLK60w==}
+    deprecated: This is a stub types definition for vuejs (https://github.com/vuejs/vue). vuejs provides its own type definitions, so you don't need @types/vue installed!
 
   '@vitejs/plugin-vue@6.0.1':
     resolution: {integrity: sha512-+MaE752hU0wfPFJEUAIxqw18+20euHHdxVtMvbFcOEpjEyfqXH/5DCoTHiVJ0J29EhTJdoTkjEv5YBKU9dnoTw==}
@@ -927,6 +934,12 @@ snapshots:
       vite: 7.1.12(jiti@2.6.1)(lightningcss@1.30.2)
 
   '@types/estree@1.0.8': {}
+
+  '@types/vue@2.0.0(typescript@5.9.3)':
+    dependencies:
+      vue: 3.5.22(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@vitejs/plugin-vue@6.0.1(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2))(vue@3.5.22(typescript@5.9.3))':
     dependencies:

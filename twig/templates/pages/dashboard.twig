@@ -1,30 +1,41 @@
 {% extends 'base.twig' %}
 {% set c = copyDashboard %}
 {% block content %}
-<section class="l-container py-2xl l-stack">
+<section class="l-container py-2xl l-stack" data-page="dashboard">
   {% include 'partials/page_header.twig' with { title: c.title, subtitle: c.subtitle } %}
-  <div class="l-grid-3">
-    <article class="c-stat-card">
+  <div class="grid gap-lg md:grid-cols-4" data-dashboard-stats aria-busy="true">
+    <article class="c-stat-card animate-fade-up">
       <div>
         <span class="c-stat-card__label">{{ c.stats.total }}</span>
-        <div class="c-stat-card__value">{{ stats.total|default(0) }}</div>
+        <div class="c-stat-card__value" data-stat="total">0</div>
       </div>
     </article>
-    <article class="c-stat-card">
+    <article class="c-stat-card animate-fade-up">
       <div>
         <span class="c-stat-card__label">{{ c.stats.open }}</span>
-        <div class="c-stat-card__value">{{ stats.open|default(0) }}</div>
+        <div class="c-stat-card__value" data-stat="open">0</div>
       </div>
     </article>
-    <article class="c-stat-card">
+    <article class="c-stat-card animate-fade-up">
       <div>
-        <span class="c-stat-card__label">{{ c.stats.resolved }}</span>
-        <div class="c-stat-card__value">{{ stats.resolved|default(0) }}</div>
+        <span class="c-stat-card__label">{{ c.stats.inProgress }}</span>
+        <div class="c-stat-card__value" data-stat="inProgress">0</div>
+      </div>
+    </article>
+    <article class="c-stat-card animate-fade-up">
+      <div>
+        <span class="c-stat-card__label">{{ c.stats.closed }}</span>
+        <div class="c-stat-card__value" data-stat="closed">0</div>
       </div>
     </article>
   </div>
   <div class="c-page-header__actions">
     <a class="c-button c-button--primary" href="/tickets">{{ c.actions.toTickets }}</a>
   </div>
+  <section class="c-empty animate-fade-up" data-dashboard-empty hidden>
+    <img class="c-empty__illustration" src="/assets/media/icons/bar-chart.svg" alt="" />
+    <p class="c-empty__title">{{ copyTickets.empty.primary.title }}</p>
+    <a class="c-button c-button--primary" href="/tickets">{{ copyTickets.empty.primary.action }}</a>
+  </section>
 </section>
 {% endblock %}

@@ -2,5 +2,8 @@
 **/*vendor
 **/*.obsidian
 **/*.vite
+**/.vite
 **/*.env
 docs/copy.md
+.cache/
+**/tsconfig.tsbuildinfo

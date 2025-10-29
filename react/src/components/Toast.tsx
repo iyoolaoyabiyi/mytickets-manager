@@ -59,7 +59,7 @@ export default function Toast() {
       {toasts.map((toast) => (
         <article
           key={toast.id}
-          className="c-toast"
+          className={`c-toast  c-toast--${toast.level}`}
           data-level={toast.level}
           data-leaving={toast.leaving}
           role={toast.level === 'error' ? 'alert' : 'status'}

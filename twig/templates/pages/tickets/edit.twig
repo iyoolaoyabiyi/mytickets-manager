@@ -21,14 +21,22 @@
     <div class="c-field">
       <label for="e-status" class="c-field__label">{{ c.form.labels.status }}</label>
       <select id="e-status" class="c-field__control">
-        <option {% if ticket.status == 'open' %}selected{% endif %}>open</option>
-        <option {% if ticket.status == 'in_progress' %}selected{% endif %}>in_progress</option>
-        <option {% if ticket.status == 'closed' %}selected{% endif %}>closed</option>
+        <option value="open" {% if ticket.status == 'open' %}selected{% endif %}>open</option>
+        <option value="in_progress" {% if ticket.status == 'in_progress' %}selected{% endif %}>in_progress</option>
+        <option value="closed" {% if ticket.status == 'closed' %}selected{% endif %}>closed</option>
+      </select>
+    </div>
+    <div class="c-field">
+      <label for="e-priority" class="c-field__label">{{ c.form.labels.priority }}</label>
+      <select id="e-priority" class="c-field__control">
+        <option value="high" {% if ticket.priority == 'high' %}selected{% endif %}>High</option>
+        <option value="medium" {% if ticket.priority == 'medium' %}selected{% endif %}>Medium</option>
+        <option value="low" {% if ticket.priority == 'low' %}selected{% endif %}>Low</option>
       </select>
     </div>
     <div class="c-modal__actions">
-      <button class="c-button c-button--primary">Save</button>
-      <a class="c-button c-button--secondary" href="/tickets">Cancel</a>
+      <button class="c-button c-button--primary">{{ c.form.actions.update }}</button>
+      <a class="c-button c-button--secondary" href="/tickets">{{ c.form.actions.cancel }}</a>
     </div>
   </section>
 </section>

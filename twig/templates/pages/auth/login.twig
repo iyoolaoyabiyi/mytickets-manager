@@ -1,23 +1,47 @@
 {% extends 'base.twig' %}
 {% set c = copyLogin %}
 {% block content %}
-<section class="c-auth-card">
-  <h1 class="c-page-header__title">{{ c.title }}</h1>
-  <form class="c-auth-card__form" novalidate>
+<section class="c-auth-card l-stack" data-page="login">
+  <header class="c-page-header">
+    <h1 class="c-page-header__title">{{ c.heading }}</h1>
+    <p class="c-page-header__subtitle">{{ c.tagline }}</p>
+  </header>
+  <form
+    class="c-auth-card__form"
+    novalidate
+    data-auth-form="login"
+    data-redirect="{{ redirect|default('') }}"
+  >
+    <h2 class="c-modal__title">{{ c.title }}</h2>
     <div class="c-auth-card__fields">
       <div class="c-field">
-        <label for="email" class="c-field__label">{{ c.form.labels.email }}</label>
-        <input id="email" type="email" placeholder="{{ c.form.placeholders.email }}" class="c-field__control" />
-        <p class="c-field__message" id="email-msg" hidden></p>
+        <label for="login-email" class="c-field__label">{{ c.form.labels.email }}</label>
+        <input
+          id="login-email"
+          name="email"
+          type="email"
+          placeholder="{{ c.form.placeholders.email }}"
+          class="c-field__control"
+          autocomplete="email"
+        />
+        <p class="c-field__message" id="login-email-error" hidden></p>
       </div>
       <div class="c-field">
-        <label for="password" class="c-field__label">{{ c.form.labels.password }}</label>
-        <input id="password" type="password" placeholder="{{ c.form.placeholders.password }}" class="c-field__control" />
-        <p class="c-field__message" id="password-msg" hidden></p>
+        <label for="login-password" class="c-field__label">{{ c.form.labels.password }}</label>
+        <input
+          id="login-password"
+          name="password"
+          type="password"
+          placeholder="{{ c.form.placeholders.password }}"
+          class="c-field__control"
+          autocomplete="current-password"
+        />
+        <p class="c-field__message" id="login-password-error" hidden></p>
       </div>
     </div>
+    <p class="c-alert" id="login-form-error" hidden></p>
     <div class="c-auth-card__actions">
-      <button class="c-button c-button--primary" type="submit">{{ c.form.submit }}</button>
+      <button class="c-button c-button--primary" type="submit" data-button="submit">{{ c.form.submit }}</button>
       <p class="c-auth-card__switch">
         <a href="/auth/signup">{{ c.links.switch }}</a>
       </p>

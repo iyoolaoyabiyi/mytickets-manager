@@ -26,20 +26,29 @@ $copyTickets   = $copy('tickets');
 $copyTicketEdit= $copy('ticketEdit');
 
 // mock auth + data (replace with real app logic later)
+$session = null;
 $isAuth = false;
-$stats  = ['total' => 0, 'open' => 0, 'resolved' => 0];
-$tickets = [
-  // example: ['id'=>123,'title'=>'Example Ticket','status'=>'open','relativeTime'=>'2h ago']
-];
+$stats  = ['total' => 0, 'open' => 0, 'inProgress' => 0, 'closed' => 0];
+$tickets = [];
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $theme = 'light'; // or 'dark'
 
+$metaBase = function (string $title, string $description, string $path) {
+  return [
+    'title' => $title . ' · myTickets Manager',
+    'description' => $description,
+    'canonical' => $path
+  ];
+};
+
 switch ($uri) {
   case '/':
     echo $twig->render('pages/landing.twig', [
-      'title'       => 'myTickets Manager',
+      'meta'        => $metaBase($copyLanding['hero']['title'], $copyLanding['hero']['subtitle'], '/'),
       'theme'       => $theme,
+      'page_id'     => 'landing',
+      'page_props'  => ['copy' => $copyLanding],
       'is_auth'     => $isAuth,
       'copyGlobal'  => $copyGlobal,
       'copyLanding' => $copyLanding,
@@ -48,9 +57,12 @@ switch ($uri) {
 
   case '/auth/login':
     echo $twig->render('pages/auth/login.twig', [
-      'title'      => $copyLogin['title'],
+      'meta'       => $metaBase($copyLogin['title'], $copyLogin['tagline'], '/auth/login'),
       'theme'      => $theme,
-      'is_auth'    => $isAuth,
+      'page_id'    => 'login',
+      'page_props' => ['copy' => $copyLogin],
+      'redirect'   => $_GET['redirect'] ?? '',
+      'is_auth'    => false,
       'copyGlobal' => $copyGlobal,
       'copyLogin'  => $copyLogin,
     ]);
@@ -58,9 +70,11 @@ switch ($uri) {
 
   case '/auth/signup':
     echo $twig->render('pages/auth/signup.twig', [
-      'title'      => $copySignup['title'],
+      'meta'       => $metaBase($copySignup['title'], $copySignup['tagline'], '/auth/signup'),
       'theme'      => $theme,
-      'is_auth'    => $isAuth,
+      'page_id'    => 'signup',
+      'page_props' => ['copy' => $copySignup],
+      'is_auth'    => false,
       'copyGlobal' => $copyGlobal,
       'copySignup' => $copySignup,
     ]);
@@ -68,19 +82,24 @@ switch ($uri) {
 
   case '/dashboard':
     echo $twig->render('pages/dashboard.twig', [
-      'title'        => $copyDashboard['title'],
+      'meta'         => $metaBase($copyDashboard['title'], $copyDashboard['subtitle'], '/dashboard'),
       'theme'        => $theme,
+      'page_id'      => 'dashboard',
+      'page_props'   => ['copy' => $copyDashboard],
       'is_auth'      => true,
       'copyGlobal'   => $copyGlobal,
       'copyDashboard'=> $copyDashboard,
+      'copyTickets'  => $copyTickets,
       'stats'        => $stats,
     ]);
     break;
 
   case '/tickets':
     echo $twig->render('pages/tickets/index.twig', [
-      'title'       => $copyTickets['title'],
+      'meta'        => $metaBase($copyTickets['title'], $copyTickets['title'], '/tickets'),
       'theme'       => $theme,
+      'page_id'     => 'tickets',
+      'page_props'  => ['copy' => $copyTickets],
       'is_auth'     => true,
       'copyGlobal'  => $copyGlobal,
       'copyTickets' => $copyTickets,
@@ -96,10 +115,13 @@ switch ($uri) {
         'title' => 'Example Ticket',
         'description' => 'Optional details…',
         'status' => 'open',
+        'priority' => 'medium',
       ];
       echo $twig->render('pages/tickets/edit.twig', [
-        'title'          => 'Edit Ticket',
+        'meta'           => $metaBase($copyTicketEdit['title'], 'Update ticket details', $uri),
         'theme'          => $theme,
+        'page_id'        => 'ticket-edit',
+        'page_props'     => ['copy' => $copyTicketEdit, 'ticket' => $ticket],
         'is_auth'        => true,
         'copyGlobal'     => $copyGlobal,
         'copyTicketEdit' => $copyTicketEdit,
@@ -110,8 +132,10 @@ switch ($uri) {
 
     http_response_code(404);
     echo $twig->render('base.twig', [
-      'title'      => 'Not Found',
+      'meta'       => $metaBase('Not Found', 'The requested page could not be located.', $uri),
       'theme'      => $theme,
+      'page_id'    => 'not-found',
+      'page_props' => [],
       'copyGlobal' => $copyGlobal,
     ]);
 }

@@ -1,48 +1,79 @@
 {% extends 'base.twig' %}
 {% set c = copyTickets %}
 {% block content %}
-<section class="l-container py-2xl l-stack">
+<section class="l-container py-2xl l-stack" data-page="tickets">
   {% include 'partials/page_header.twig' with {
     title: c.title,
-    actions_html: '<a class="c-button c-button--primary" href="/tickets/new">' ~ c.actions.new ~ '</a>'
+    actions_html: '<button class="c-button c-button--primary" type="button" data-action="open-create">' ~ c.actions.new ~ '</button>'
   } %}
 
-  <section class="c-filters" aria-label="Filters">
-    <input id="q" type="search" placeholder="{{ c.filters.searchPlaceholder }}" class="c-filters__search" />
-    <div class="l-cluster">
-      <label for="status" class="c-field__label">{{ c.filters.status.label }}</label>
-      <select id="status" class="c-field__control">
-        {% for o in c.filters.status.options %}
-          <option>{{ o }}</option>
+  <p class="c-alert" data-alert hidden></p>
+
+  <form
+    class="c-filters l-stack md:grid md:grid-cols-[2fr_1fr_1fr_auto] md:items-end"
+    aria-label="Filters"
+    data-ticket-filters
+  >
+    <div class="c-field">
+      <label for="tickets-search" class="c-field__label">{{ c.filters.search.label|default('Search') }}</label>
+      <input
+        id="tickets-search"
+        name="q"
+        type="search"
+        placeholder="{{ c.filters.search.placeholder }}"
+        class="c-filters__search"
+      />
+    </div>
+    <div class="c-field">
+      <label for="tickets-status" class="c-field__label">{{ c.filters.status.label }}</label>
+      <select id="tickets-status" name="status" class="c-field__control">
+        {% for option in c.filters.status.options %}
+          <option value="{{ option == 'All' ? 'all' : option }}">{{ option }}</option>
         {% endfor %}
       </select>
     </div>
-  </section>
+    <div class="c-field">
+      <label for="tickets-priority" class="c-field__label">{{ c.filters.priority.label }}</label>
+      <select id="tickets-priority" name="priority" class="c-field__control">
+        <option value="all">All</option>
+        {% for option in c.filters.priority.options %}
+          <option value="{{ option|lower }}">{{ option }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="c-button c-button--secondary" type="submit">{{ c.filters.actions.search }}</button>
+  </form>
 
-  <section role="feed" id="tickets-feed" class="l-stack">
-    {% if tickets is empty %}
-      <div class="c-empty">
-        <img class="c-empty__illustration" src="/assets/media/icons/bar-chart.svg" alt="" />
-        <p class="c-empty__title">No tickets yet.</p>
-        <a class="c-button c-button--primary" href="/tickets/new">Create your first ticket</a>
-      </div>
-    {% else %}
-      {% for t in tickets %}
-        <article class="c-ticket-card" role="article">
-          <div>
-            <h3 class="c-ticket-card__title">{{ t.title }}</h3>
-            <p class="c-ticket-card__meta">#{{ t.id }} · Updated {{ t.relativeTime }}</p>
-          </div>
-          <div class="l-cluster">
-            <span class="c-tag {% if t.status == 'open' %}c-tag--open{% elseif t.status == 'in_progress' %}c-tag--in-progress{% else %}c-tag--closed{% endif %}">{{ t.status }}</span>
-            <div class="c-ticket-card__actions">
-              <a class="c-button c-button--secondary" href="/tickets/{{ t.id }}/edit">Edit</a>
-              <button class="c-button c-button--danger" data-ticket-id="{{ t.id }}">Delete</button>
-            </div>
-          </div>
-        </article>
-      {% endfor %}
-    {% endif %}
+  <section role="feed" aria-busy="true" id="tickets-feed" class="l-stack" data-tickets-feed>
+    <div class="c-card">Loading tickets…</div>
   </section>
 </section>
+
+<template id="ticket-card-template">
+  <article class="c-ticket-card animate-fade-up" role="article">
+    <div class="min-w-0 l-stack">
+      <h3 class="c-ticket-card__title" data-ticket-title></h3>
+      <p class="c-ticket-card__meta" data-ticket-meta></p>
+      <p class="text-sm text-fg-muted" data-ticket-description hidden></p>
+    </div>
+    <div class="l-stack md:items-end md:flex md:flex-col md:gap-sm">
+      <div class="l-cluster">
+        <span class="c-tag" data-ticket-status></span>
+        <span class="c-tag" data-ticket-priority></span>
+      </div>
+      <div class="c-ticket-card__actions">
+        <button class="c-button c-button--secondary" type="button" data-action="edit-ticket">{{ c.card.labels.edit }}</button>
+        <button class="c-button c-button--danger" type="button" data-action="delete-ticket">{{ c.card.labels.delete }}</button>
+      </div>
+    </div>
+  </article>
+</template>
+
+<template id="ticket-empty-template">
+  <div class="c-empty animate-fade-up">
+    <img class="c-empty__illustration" src="/assets/media/icons/bar-chart.svg" alt="" />
+    <p class="c-empty__title" data-empty-title>{{ c.empty.primary.title }}</p>
+    <button class="c-button c-button--primary" type="button" data-action="primary"></button>
+  </div>
+</template>
 {% endblock %}

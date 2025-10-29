@@ -89,7 +89,7 @@ export default function TicketModal({ visible, mode, ticket, onClose, onSubmit }
     if (!validate()) return
     onSubmit({
       title: draft.title.trim(),
-      description: draft.description.trim(),
+      description: (draft.description ?? '').trim(),
       status: draft.status,
       priority: draft.priority
     })

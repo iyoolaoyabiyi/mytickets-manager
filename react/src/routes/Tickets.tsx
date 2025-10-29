@@ -31,7 +31,7 @@ export default function Tickets() {
   const [alertMessage, setAlertMessage] = useState('')
   const [filters, setFilters] = useState<TicketFilters>(() => defaultFilters())
   const filtersRef = useRef(filters)
-  const searchTimer = useRef<number>()
+  const searchTimer = useRef<number | undefined>(undefined)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [modal, setModal] = useState<{ open: boolean; mode: 'create' | 'edit'; ticket: Ticket | null }>(
     { open: false, mode: 'create', ticket: null }
