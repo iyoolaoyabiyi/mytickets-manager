@@ -306,8 +306,8 @@ export default function Tickets() {
                     <p className="c-ticket-card__meta">{metaFor(ticket)}</p>
                     {ticket.description && <p className="text-sm text-fg-muted">{ticket.description}</p>}
                   </div>
-                  <div className="l-stack md:items-end md:flex md:flex-col md:gap-sm">
-                    <div className="l-cluster">
+                  <div className="l-stack md:items-end md:flex md:flex-col md:gap-md">
+                    <div className="c-ticket-card__badges">
                       <span className={`c-tag ${statusClass(ticket.status)}`}>{formatStatus(ticket.status)}</span>
                       <span className="c-tag">{formatPriority(ticket.priority)}</span>
                     </div>

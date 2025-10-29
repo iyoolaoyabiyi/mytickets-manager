@@ -1,7 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # If the app is served from a subfolder on the host, set the correct base here
+    # (update this if you deploy under a different subpath)
+    RewriteBase /mytickets-manager/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [QSA,L]
+    # Forward all non-file/non-dir requests to the front controller
+    RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
+
+# Allow PHP to access PATH_INFO if the server supports it (optional)
+AcceptPathInfo On
 

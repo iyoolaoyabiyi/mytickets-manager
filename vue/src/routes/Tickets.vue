@@ -71,8 +71,8 @@
             <p class="c-ticket-card__meta">{{ metaFor(ticket) }}</p>
             <p v-if="ticket.description" class="text-sm text-fg-muted">{{ ticket.description }}</p>
           </div>
-          <div class="l-stack md:items-end md:flex md:flex-col md:gap-sm">
-            <div class="l-cluster">
+          <div class="l-stack md:items-end md:flex md:flex-col md:gap-md">
+            <div class="c-ticket-card__badges">
               <span class="c-tag" :class="statusClass(ticket.status)">{{ formatStatus(ticket.status) }}</span>
               <span class="c-tag">{{ formatPriority(ticket.priority) }}</span>
             </div>

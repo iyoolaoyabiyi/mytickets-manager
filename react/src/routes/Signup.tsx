@@ -155,7 +155,6 @@ export default function Signup() {
           </p>
         </div>
       </form>
-      <p className="c-auth-card__hint">{copy.postSignup}</p>
     </section>
   )
 }

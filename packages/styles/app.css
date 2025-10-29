@@ -109,6 +109,8 @@ html, body { height: 100%; }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { @apply font-sans text-fg bg-bg; -webkit-font-smoothing: antialiased; background: linear-gradient(180deg, var(--surface-2) 0%, var(--bg) 60%); }
+a, button, [role="button"], .c-button { cursor: pointer; }
+button[disabled], .c-button[disabled] { cursor: not-allowed; }
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -189,11 +191,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @utility c-footer__link { @apply hover:text-accent; }
 @utility c-footer__note { @apply text-sm; }
 
-@utility c-hero { @apply relative overflow-hidden min-h-[600px]; }
-@utility c-hero__inner { @apply l-container text-center l-stack py-2xl; }
-@utility c-hero__title { @apply text-4xl md:text-5xl font-semibold; }
-@utility c-hero__subtitle { @apply text-lg text-fg-muted ; }
-@utility c-hero__actions { @apply l-cluster justify-center; }
+@utility c-hero { @apply relative overflow-hidden min-h-[600px] flex items-center justify-center; }
+@utility c-hero__inner {
+  @apply l-container text-center l-stack py-2xl relative;
+  gap: var(--spacing-lg);
+  z-index: 1;
+}
+@utility c-hero__title { @apply text-4xl md:text-5xl font-semibold leading-tight; }
+@utility c-hero__subtitle {
+  @apply text-lg text-fg-muted max-w-[60ch] mx-auto;
+}
+@utility c-hero__actions {
+  @apply l-cluster justify-center;
+  gap: var(--spacing-md);
+}
 @utility c-hero__wave { @apply absolute bottom-0 left-0 w-full; }
 @utility c-hero__decor { @apply absolute -top-10 right-[10%] w-40 opacity-80; }
 
@@ -247,7 +258,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .c-ticket-card:hover { transform: translateY(-2px); }
 @utility c-ticket-card__title { @apply font-medium truncate; }
 @utility c-ticket-card__meta { @apply text-sm text-fg-muted; }
-@utility c-ticket-card__actions { @apply l-cluster; }
+@utility c-ticket-card__badges {
+  @apply l-cluster;
+  gap: var(--spacing-md);
+}
+@utility c-ticket-card__actions {
+  @apply l-cluster;
+  gap: var(--spacing-md);
+}
 
 @utility c-modal__title { @apply text-lg font-semibold; }
 @utility c-modal__text { @apply text-fg-muted mt-sm; }

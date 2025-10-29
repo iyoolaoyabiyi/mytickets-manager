@@ -79,6 +79,16 @@ var subscribeToastDismissals = (listener) => {
 };
 
 // ../packages/utils/auth.ts
+var isSessionUser = (value) => {
+  if (!value || typeof value !== "object" || value === null) return false;
+  const candidate = value;
+  return typeof candidate.id === "number" && Number.isFinite(candidate.id) && typeof candidate.name === "string" && candidate.name.length > 0 && typeof candidate.email === "string" && candidate.email.length > 0;
+};
+var isValidSession = (value) => {
+  if (!value || typeof value !== "object" || value === null) return false;
+  const candidate = value;
+  return typeof candidate.token === "string" && candidate.token.length > 0 && typeof candidate.expiresAt === "number" && Number.isFinite(candidate.expiresAt) && isSessionUser(candidate.user);
+};
 var USERS_KEY = "ticketapp_users";
 var SESSION_KEY = "ticketapp_session";
 var SESSION_EVENT = "ticketapp:session";
@@ -161,9 +171,13 @@ var readSession = () => {
   try {
     const raw = window.localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
-    const session = JSON.parse(raw);
-    memorySession = session;
-    return session;
+    const parsed = JSON.parse(raw);
+    if (!isValidSession(parsed)) {
+      writeSession(null);
+      return null;
+    }
+    memorySession = parsed;
+    return parsed;
   } catch {
     return null;
   }
@@ -214,18 +228,10 @@ var logout = () => {
   writeSession(null);
   broadcastSession(null);
 };
-var restoreSession = () => {
-  const session = readSession();
-  if (!session || isExpired(session)) {
-    logout();
-    return null;
-  }
-  broadcastSession(session);
-  return session;
-};
 var requireAuth = () => {
-  const session = restoreSession();
-  return !!session;
+  const session = readSession();
+  if (!session) return false;
+  return !isExpired(session);
 };
 var peekSession = () => readSession();
 

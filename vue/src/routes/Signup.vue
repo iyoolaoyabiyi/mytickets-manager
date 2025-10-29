@@ -75,7 +75,6 @@
         </p>
       </div>
     </form>
-    <p class="c-auth-card__hint">{{ copy.postSignup }}</p>
   </section>
 </template>
 <script setup lang="ts">
