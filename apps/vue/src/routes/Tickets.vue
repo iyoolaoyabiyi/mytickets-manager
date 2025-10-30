@@ -54,7 +54,12 @@
       <div v-else-if="isError" class="c-card c-card--error">{{ errorMessage }}</div>
       <template v-else>
         <div v-if="tickets.length === 0" class="c-empty animate-fade-up">
-          <img class="c-empty__illustration" :src="barChart" alt="" />
+          <div
+            class="c-empty__illustration"
+            aria-hidden="true"
+            role="presentation"
+            v-html="barChart"
+          />
           <p class="c-empty__title">{{ emptyTitle }}</p>
           <button
             class="c-button"
@@ -107,7 +112,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import copy from '@packages/assets/copy/tickets.json'
 import globalCopy from '@packages/assets/copy/global.json'
-import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import barChart from '@packages/assets/media/icons/bar-chart.svg?raw'
 import TicketModal from '../components/TicketModal.vue'
 import {
   createTicket,

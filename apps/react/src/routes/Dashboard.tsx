@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import copy from '@packages/assets/copy/dashboard.json'
 import ticketsCopy from '@packages/assets/copy/tickets.json'
-import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import barChart from '@packages/assets/media/icons/bar-chart.svg?raw'
 import { getTicketStats, TICKETS_CHANGED_EVENT } from '@packages/utils/tickets'
 import { useAuthGuard } from '../hooks/useAuthGuard'
 import { usePageMeta } from '../hooks/usePageMeta'
@@ -69,7 +69,12 @@ export default function Dashboard() {
       </div>
       {!loading && !hasTickets && (
         <section className="c-empty animate-fade-up">
-          <img className="c-empty__illustration" src={barChart} alt="" />
+          <div
+            className="c-empty__illustration"
+            aria-hidden="true"
+            role="presentation"
+            dangerouslySetInnerHTML={{ __html: barChart }}
+          />
           <p className="c-empty__title">{ticketsCopy.empty.primary.title}</p>
           <Link className="c-button c-button--primary" to="/tickets">
             {ticketsCopy.empty.primary.action}

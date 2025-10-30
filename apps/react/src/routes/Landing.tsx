@@ -3,32 +3,31 @@ import landing from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../hooks/usePageMeta'
 import { useSession } from '../hooks/useSession'
 
-const mediaAssets = import.meta.glob('../../packages/assets/media/**/*', {
+const svgAssets = import.meta.glob('../../packages/assets/media/**/*.svg', {
   eager: true,
-  query: '?url',
-  import: 'default',
+  as: 'raw',
 }) as Record<string, string>
 
-const asset = (icon?: string | null) => {
+const svgAsset = (icon?: string | null) => {
   if (!icon) return undefined
   const key = `../../packages/assets/media/${icon}`
-  if (!mediaAssets[key]) {
+  if (!svgAssets[key]) {
     console.warn(`Missing asset for key: ${key}`)
     return undefined
   }
-  return mediaAssets[key]
+  return svgAssets[key]
 }
 
 export default function Landing() {
-  const heroWave = asset(landing.hero.media.wave)
+  const heroWave = svgAsset(landing.hero.media.wave)
   const features = landing.features.map(feature => {
     return {
       ...feature,
-      icon: asset(feature.icon),
+      iconMarkup: svgAsset(feature.icon),
     }
   })
-  const heroCirclePrimary = asset(landing.hero.media.decorativeCircle)
-  const heroCircleSecondary = asset(
+  const heroCirclePrimary = svgAsset(landing.hero.media.decorativeCircle)
+  const heroCircleSecondary = svgAsset(
     landing.hero.media.decorativeCircleSecondary ?? landing.hero.media.decorativeCircle
   )
   const session = useSession()
@@ -55,16 +54,44 @@ export default function Landing() {
             )}
           </div>
         </div>
-        <img src={heroWave} className="c-hero__wave" alt="" aria-hidden="true" />
-        <img src={heroCirclePrimary} className="c-hero__decor" alt="" aria-hidden="true" />
-        <img src={heroCircleSecondary} className="c-hero__decor-secondary" alt="" aria-hidden="true" />
+        {heroWave && (
+          <div
+            className="c-hero__wave"
+            aria-hidden="true"
+            role="presentation"
+            dangerouslySetInnerHTML={{ __html: heroWave }}
+          />
+        )}
+        {heroCirclePrimary && (
+          <div
+            className="c-hero__decor"
+            aria-hidden="true"
+            role="presentation"
+            dangerouslySetInnerHTML={{ __html: heroCirclePrimary }}
+          />
+        )}
+        {heroCircleSecondary && (
+          <div
+            className="c-hero__decor-secondary"
+            aria-hidden="true"
+            role="presentation"
+            dangerouslySetInnerHTML={{ __html: heroCircleSecondary }}
+          />
+        )}
       </section>
 
       <section className="l-stack py-2xl">
         <div className="l-grid-3">
           {features.map((f, i) => (
             <article className="c-feature-card animate-fade-up" key={i}>
-              <img src={f.icon} className="c-feature-card__icon" alt="" />
+              {f.iconMarkup && (
+                <div
+                  className="c-feature-card__icon"
+                  aria-hidden="true"
+                  role="presentation"
+                  dangerouslySetInnerHTML={{ __html: f.iconMarkup }}
+                />
+              )}
               <h3 className="c-feature-card__title">{f.title}</h3>
               <p className="c-feature-card__body">{f.body}</p>
             </article>

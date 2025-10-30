@@ -5,29 +5,28 @@ import copy from '@packages/assets/copy/landing.json'
 import { usePageMeta } from '../composables/usePageMeta'
 import { useSession } from '../composables/useSession'
 
-const mediaAssets = import.meta.glob('../../packages/assets/media/**/*', {
+const svgAssets = import.meta.glob('../../packages/assets/media/**/*.svg', {
   eager: true,
-  query: '?url',
-  import: 'default'
+  as: 'raw'
 }) as Record<string, string>
 
-const asset = (icon?: string | null) => {
+const svgAsset = (icon?: string | null) => {
   if (!icon) return undefined
   const key = `../../packages/assets/media/${icon}`
-  if (!mediaAssets[key]) {
+  if (!svgAssets[key]) {
     console.warn(`Missing asset for key: ${key}`)
     return undefined
   }
-  return mediaAssets[key]
+  return svgAssets[key]
 }
 
-const heroWave = asset(copy.hero.media.wave)
-const heroCirclePrimary = asset(copy.hero.media.decorativeCircle)
-const heroCircleSecondary = asset(copy.hero.media.decorativeCircleSecondary ?? copy.hero.media.decorativeCircle)
+const heroWave = svgAsset(copy.hero.media.wave)
+const heroCirclePrimary = svgAsset(copy.hero.media.decorativeCircle)
+const heroCircleSecondary = svgAsset(copy.hero.media.decorativeCircleSecondary ?? copy.hero.media.decorativeCircle)
 const features = computed(() =>
   copy.features.map(feature => ({
     ...feature,
-    icon: asset(feature.icon)
+    iconMarkup: svgAsset(feature.icon)
   }))
 )
 const session = useSession()
@@ -60,15 +59,39 @@ const authenticatedHref = computed(() => copy.hero.authenticatedHref ?? '/dashbo
         </template>
       </div>
     </div>
-    <img :src="heroWave" class="c-hero__wave" alt="" aria-hidden="true" />
-    <img :src="heroCirclePrimary" class="c-hero__decor" alt="" aria-hidden="true" />
-    <img :src="heroCircleSecondary" class="c-hero__decor-secondary" alt="" aria-hidden="true" />
+    <div
+      v-if="heroWave"
+      class="c-hero__wave"
+      aria-hidden="true"
+      role="presentation"
+      v-html="heroWave"
+    />
+    <div
+      v-if="heroCirclePrimary"
+      class="c-hero__decor"
+      aria-hidden="true"
+      role="presentation"
+      v-html="heroCirclePrimary"
+    />
+    <div
+      v-if="heroCircleSecondary"
+      class="c-hero__decor-secondary"
+      aria-hidden="true"
+      role="presentation"
+      v-html="heroCircleSecondary"
+    />
   </section>
 
   <section class="l-stack py-2xl">
     <div class="l-grid-3">
       <article v-for="(f, i) in features" :key="i" class="c-feature-card animate-fade-up">
-        <img :src="f.icon" class="c-feature-card__icon" alt="" />
+        <div
+          v-if="f.iconMarkup"
+          class="c-feature-card__icon"
+          aria-hidden="true"
+          role="presentation"
+          v-html="f.iconMarkup"
+        />
         <h3 class="c-feature-card__title">{{ f.title }}</h3>
         <p class="c-feature-card__body">{{ f.body }}</p>
       </article>

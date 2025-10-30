@@ -18,16 +18,24 @@
       </div>
     </div>
   </div>
-  <img src="{{ asset_base_url|default('/packages/assets/') ~ 'media/' ~ c.hero.media.wave }}" class="c-hero__wave" alt="" />
-  <img src="{{ asset_base_url|default('/packages/assets/') ~ 'media/' ~ c.hero.media.decorativeCircle }}" class="c-hero__decor" alt="" />
-  <img src="{{ asset_base_url|default('/packages/assets/') ~ 'media/' ~ heroCircleSecondary }}" class="c-hero__decor-secondary" alt="" />
+  <div class="c-hero__wave" aria-hidden="true" role="presentation">
+    {{ inline_svg('media/' ~ c.hero.media.wave) }}
+  </div>
+  <div class="c-hero__decor" aria-hidden="true" role="presentation">
+    {{ inline_svg('media/' ~ c.hero.media.decorativeCircle) }}
+  </div>
+  <div class="c-hero__decor-secondary" aria-hidden="true" role="presentation">
+    {{ inline_svg('media/' ~ heroCircleSecondary) }}
+  </div>
 </section>
 
 <section class="l-container l-stack py-2xl">
   <div class="l-grid-3">
     {% for f in c.features %}
       <article class="c-feature-card animate-fade-up">
-        <img src="{{ asset_base_url|default('/packages/assets/') ~ 'media/' ~ f.icon }}" class="c-feature-card__icon" alt="" />
+        <div class="c-feature-card__icon" aria-hidden="true" role="presentation">
+          {{ inline_svg('media/' ~ f.icon) }}
+        </div>
         <h3 class="c-feature-card__title">{{ f.title }}</h3>
         <p class="c-feature-card__body">{{ f.body }}</p>
       </article>

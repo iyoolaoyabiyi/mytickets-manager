@@ -3,9 +3,51 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\Markup;
+use Twig\TwigFunction;
 
 $loader = new FilesystemLoader(__DIR__ . '/templates');
 $twig   = new Environment($loader, ['cache' => false]);
+
+$assetSearchRoots = [
+    dirname(__DIR__) . '/packages/assets',
+    __DIR__ . '/../packages/assets',
+    __DIR__ . '/packages/assets',
+];
+
+$twig->addFunction(new TwigFunction('inline_svg', function (string $relativePath) use ($assetSearchRoots) {
+    $cleanPath = ltrim($relativePath, '/');
+    if ($cleanPath === '' || strtolower(pathinfo($cleanPath, PATHINFO_EXTENSION)) !== 'svg') {
+        return new Markup('', 'UTF-8');
+    }
+
+    foreach ($assetSearchRoots as $root) {
+        $base = realpath($root);
+        if ($base === false) {
+            continue;
+        }
+
+        $candidate = $base . DIRECTORY_SEPARATOR . $cleanPath;
+        $realCandidate = realpath($candidate);
+        if ($realCandidate === false) {
+            continue;
+        }
+
+        if (strpos($realCandidate, $base) !== 0 || !is_file($realCandidate)) {
+            continue;
+        }
+
+        $contents = file_get_contents($realCandidate);
+        if ($contents === false) {
+            continue;
+        }
+
+        return new Markup($contents, 'UTF-8');
+    }
+
+    error_log("Inline SVG not found: {$relativePath}");
+    return new Markup('', 'UTF-8');
+}, ['is_safe' => ['html']]));
 
 // Figure out the public path prefix where this script runs (supports subfolders)
 $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');

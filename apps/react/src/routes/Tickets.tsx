@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import copy from '@packages/assets/copy/tickets.json'
 import globalCopy from '@packages/assets/copy/global.json'
-import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import barChart from '@packages/assets/media/icons/bar-chart.svg?raw'
 import TicketModal from '../components/TicketModal'
 import {
   createTicket,
@@ -297,7 +297,12 @@ export default function Tickets() {
           <>
             {tickets.length === 0 ? (
               <div className="c-empty animate-fade-up">
-                <img className="c-empty__illustration" src={barChart} alt="" />
+                <div
+                  className="c-empty__illustration"
+                  aria-hidden="true"
+                  role="presentation"
+                  dangerouslySetInnerHTML={{ __html: barChart }}
+                />
                 <p className="c-empty__title">{emptyTitle}</p>
                 <button
                   className={`c-button ${isFiltered ? 'c-button--secondary' : 'c-button--primary'}`}

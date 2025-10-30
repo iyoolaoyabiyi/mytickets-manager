@@ -22,7 +22,12 @@
       </RouterLink>
     </div>
     <section v-if="!loading && !hasTickets" class="c-empty animate-fade-up">
-      <img class="c-empty__illustration" :src="barChart" alt="" />
+      <div
+        class="c-empty__illustration"
+        aria-hidden="true"
+        role="presentation"
+        v-html="barChart"
+      />
       <p class="c-empty__title">{{ ticketsCopy.empty.primary.title }}</p>
       <RouterLink class="c-button c-button--primary" to="/tickets">
         {{ ticketsCopy.empty.primary.action }}
@@ -35,7 +40,7 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import copy from '@packages/assets/copy/dashboard.json'
 import ticketsCopy from '@packages/assets/copy/tickets.json'
-import barChart from '@packages/assets/media/icons/bar-chart.svg'
+import barChart from '@packages/assets/media/icons/bar-chart.svg?raw'
 import { getTicketStats, TICKETS_CHANGED_EVENT } from '@packages/utils/tickets'
 import { usePageMeta } from '../composables/usePageMeta'
 
