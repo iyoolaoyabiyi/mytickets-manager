@@ -244,14 +244,6 @@
       color: color-mix(in srgb, var(--accent) 30%, var(--surface-2) 70%);
     }
   }
-  .c-hero__wave svg,
-  .c-hero__decor svg,
-  .c-hero__decor-secondary svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    color: inherit;
-  }
   .c-skiplink {
     position: fixed;
     left: 50%;
@@ -421,9 +413,9 @@
   .c-feature-card__icon {
     margin-inline: auto;
     margin-bottom: var(--spacing-sm);
+    display: flex;
     height: calc(var(--spacing) * 14);
     width: calc(var(--spacing) * 14);
-    display: flex;
     align-items: center;
     justify-content: center;
     --tw-drop-shadow-size: drop-shadow(0 1px 2px var(--tw-drop-shadow-color, rgb(0 0 0 / 0.15)));
@@ -445,18 +437,12 @@
     padding: var(--spacing-xs);
     border-radius: var(--radius-md);
   }
-  .c-feature-card__icon svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: inherit;
-  }
   .c-empty__illustration {
     margin-inline: auto;
     margin-bottom: var(--spacing-sm);
+    display: flex;
     height: calc(var(--spacing) * 28);
     width: calc(var(--spacing) * 28);
-    display: flex;
     align-items: center;
     justify-content: center;
     color: var(--accent);
@@ -464,12 +450,6 @@
       color: color-mix(in srgb, var(--accent) 70%, var(--fg) 30%);
     }
     opacity: 0.85;
-  }
-  .c-empty__illustration svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: inherit;
   }
   .c-footer__inner {
     margin-inline: auto;
@@ -1382,6 +1362,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transform: translateY(-2px);
   box-shadow: var(--shadow-2);
 }
+.c-feature-card__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: inherit;
+}
 [data-theme="dark"] .c-feature-card__icon {
   color: var(--accent-weak);
   @supports (color: color-mix(in lab, red, red)) {
@@ -1423,6 +1409,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     color: color-mix(in srgb, var(--accent-weak) 75%, var(--fg) 25%);
   }
   opacity: 0.9;
+}
+.c-empty__illustration svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  color: inherit;
+}
+.c-hero__wave svg, .c-hero__decor svg, .c-hero__decor-secondary svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  color: inherit;
 }
 .c-toast[data-level="success"] {
   border-color: var(--color-green-300);
