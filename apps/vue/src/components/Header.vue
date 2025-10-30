@@ -1,27 +1,22 @@
 <template>
   <header class="c-header">
     <div class="c-header__inner">
-      <RouterLink to="/" class="c-header__brand">{{ copy.app.name }}</RouterLink>
-      <div class="l-cluster">
-        <button
-          class="c-header__toggle"
-          type="button"
-          aria-controls="primary-nav"
-          :aria-expanded="isMenuOpen"
-          :aria-label="menuLabel"
-          @click="toggleMenu"
-          :data-state="isMenuOpen ? 'open' : 'closed'"
-        >
-          <span class="sr-only">{{ menuLabel }}</span>
-          <span class="c-header__toggle-icon" aria-hidden="true"></span>
-        </button>
-        <button
-          class="c-button c-button--secondary hidden md:inline-flex"
-          type="button"
-          @click="toggleThemeHandler"
-        >
-          {{ themeToggleLabel }}
-        </button>
+      <div class="l-cluster justify-between w-full">
+        <RouterLink to="/" class="c-header__brand">{{ copy.app.name }}</RouterLink>
+        <div class="l-cluster">
+          <button
+            class="c-header__toggle"
+            type="button"
+            aria-controls="primary-nav"
+            :aria-expanded="isMenuOpen"
+            :aria-label="menuLabel"
+            @click="toggleMenu"
+            :data-state="isMenuOpen ? 'open' : 'closed'"
+          >
+            <span class="sr-only">{{ menuLabel }}</span>
+            <span class="c-header__toggle-icon" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
       <nav
         id="primary-nav"
@@ -48,7 +43,7 @@
           </button>
         </template>
         <button
-          class="c-button c-button--secondary md:hidden"
+          class="c-button c-button--secondary"
           type="button"
           @click="toggleThemeHandler"
         >

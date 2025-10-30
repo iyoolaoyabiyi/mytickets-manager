@@ -161,9 +161,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* Components*/
 @utility c-header { @apply sticky top-0 z-50 bg-surface/95 border-b border-border backdrop-blur; }
-@utility c-header__inner { @apply l-container flex items-center justify-between py-sm; }
+@utility c-header__inner { @apply l-container flex flex-col md:flex-row items-center justify-between gap-md py-sm; }
 @utility c-header__brand { @apply text-accent font-semibold; }
-@utility c-header__nav { @apply hidden md:flex items-center gap-md; }
+@utility c-header__nav { @apply hidden md:flex items-center gap-md w-full justify-end; }
 @utility c-header__link { @apply text-fg-muted hover:text-accent; }
 [data-auth-group] { display: contents; }
 [data-auth-group][hidden] { display: none !important; }

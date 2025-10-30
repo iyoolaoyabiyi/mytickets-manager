@@ -53,27 +53,22 @@ export default function Header() {
   return (
     <header className="c-header">
       <div className="c-header__inner">
-        <Link to="/" className="c-header__brand">{globalCopy.app.name}</Link>
-        <div className="l-cluster">
-          <button
-            className="c-header__toggle"
-            type="button"
-            aria-controls="primary-nav"
-            aria-expanded={isMenuOpen}
-            aria-label={menuLabel}
-            onClick={() => setIsMenuOpen((open) => !open)}
-            data-state={isMenuOpen ? 'open' : 'closed'}
-          >
-            <span className="sr-only">{menuLabel}</span>
-            <span className="c-header__toggle-icon" aria-hidden="true" />
-          </button>
-          <button
-            className="c-button c-button--secondary hidden md:inline-flex"
-            type="button"
-            onClick={handleThemeToggle}
-          >
-            {themeToggleLabel}
-          </button>
+        <div className='l-cluster justify-between w-full'>
+          <Link to="/" className="c-header__brand">{globalCopy.app.name}</Link>
+          <div className="l-cluster">
+            <button
+              className="c-header__toggle"
+              type="button"
+              aria-controls="primary-nav"
+              aria-expanded={isMenuOpen}
+              aria-label={menuLabel}
+              onClick={() => setIsMenuOpen((open) => !open)}
+              data-state={isMenuOpen ? 'open' : 'closed'}
+            >
+              <span className="sr-only">{menuLabel}</span>
+              <span className="c-header__toggle-icon" aria-hidden="true" />
+            </button>
+          </div>
         </div>
         <nav
           id="primary-nav"
@@ -91,7 +86,7 @@ export default function Header() {
             )
           ))}
           <button
-            className="c-button c-button--secondary md:hidden"
+            className="c-button c-button--secondary"
             type="button"
             onClick={handleThemeToggle}
           >

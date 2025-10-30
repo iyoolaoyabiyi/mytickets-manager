@@ -474,9 +474,14 @@
     max-width: 1440px;
     padding-inline: var(--spacing-lg);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: var(--spacing-md);
     padding-block: var(--spacing-sm);
+    @media (width >= 768px) {
+      flex-direction: row;
+    }
   }
   .c-auth-card {
     margin-inline: auto;
@@ -536,6 +541,16 @@
     align-items: center;
     justify-content: center;
     padding-block: var(--spacing-2xl);
+  }
+  .c-header__nav {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    @media (width >= 768px) {
+      display: flex;
+    }
   }
   .c-auth-card__form {
     display: grid;
@@ -664,14 +679,6 @@
     --tw-duration: 300ms;
     transition-duration: 300ms;
   }
-  .c-header__nav {
-    display: none;
-    align-items: center;
-    gap: var(--spacing-md);
-    @media (width >= 768px) {
-      display: flex;
-    }
-  }
   .c-tag {
     display: inline-flex;
     align-items: center;
@@ -739,6 +746,9 @@
     padding-block: var(--spacing-sm);
     color: var(--color-fg);
   }
+  .w-full {
+    width: 100%;
+  }
   .max-w-xl {
     max-width: var(--spacing-xl);
   }
@@ -757,6 +767,9 @@
   }
   .resize {
     resize: both;
+  }
+  .justify-between {
+    justify-content: space-between;
   }
   .gap-lg {
     gap: var(--spacing-lg);
@@ -1057,16 +1070,6 @@
   .md\:grid {
     @media (width >= 768px) {
       display: grid;
-    }
-  }
-  .md\:hidden {
-    @media (width >= 768px) {
-      display: none;
-    }
-  }
-  .md\:inline-flex {
-    @media (width >= 768px) {
-      display: inline-flex;
     }
   }
   .md\:grid-cols-4 {
